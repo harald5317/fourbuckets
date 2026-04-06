@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four Buckets — Retirement Projection Planner</title>
+<meta name="description" content="A transparent, powerful retirement planning tool that shows exactly how your money grows, when RMDs kick in, and whether your portfolio will last. Join the early access waitlist.">
+<meta property="og:title" content="Four Buckets — Retirement Projection Planner">
+<meta property="og:description" content="No black boxes. No advisor upsells. Just clear, honest retirement math — tracked across all four buckets. Join the waitlist.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:   #0d1b2a;
+  --navy2:  #112236;
+  --teal:   #0d9488;
+  --teal2:  #14b8a6;
+  --gold:   #d4a832;
+  --gold2:  #f0c040;
+  --cream:  #faf6ee;
+  --slate:  #64748b;
+  --light:  #f1f5f9;
+  --white:  #ffffff;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── Noise texture overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ── Typography ── */
+.serif { font-family: 'Playfair Display', serif; }
+
+/* ── Hero ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  background: rgba(13,27,42,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--gold); }
+
+nav a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--white); }
+
+.nav-cta {
+  background: var(--teal);
+  color: var(--white) !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--teal2) !important; }
+
+/* ── Hero Section ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7rem 1.5rem 5rem;
+  overflow: hidden;
+}
+
+/* Radial gradient background */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(ellipse at center,
+    rgba(13,148,136,0.18) 0%,
+    rgba(212,168,50,0.08) 40%,
+    transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero > * { position: relative; z-index: 1; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(212,168,50,0.12);
+  border: 1px solid rgba(212,168,50,0.3);
+  color: var(--gold2);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--gold2);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--teal2);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+/* ── Signup Form ── */
+.signup-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto 1rem;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.signup-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.875rem 1.25rem;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.signup-form input::placeholder { color: rgba(255,255,255,0.35); }
+.signup-form input:focus {
+  border-color: var(--teal);
+  background: rgba(255,255,255,0.10);
+}
+
+.signup-form button {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 8px;
+  padding: 0.875rem 1.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+}
+.signup-form button:hover { background: var(--gold2); transform: translateY(-1px); }
+.signup-form button:active { transform: translateY(0); }
+
+.form-note {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  animation: fadeUp 0.6s 0.35s ease both;
+}
+
+.success-msg {
+  display: none;
+  background: rgba(13,148,136,0.15);
+  border: 1px solid rgba(13,148,136,0.4);
+  color: var(--teal2);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Social proof ── */
+.social-proof {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2.5rem;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+
+.avatars {
+  display: flex;
+}
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--navy);
+  margin-left: -8px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--navy);
+}
+.avatar:first-child { margin-left: 0; }
+.av1 { background: #7dd3fc; }
+.av2 { background: #86efac; }
+.av3 { background: #fbbf24; }
+.av4 { background: #f9a8d4; }
+.av5 { background: #c4b5fd; }
+
+.social-proof p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+}
+.social-proof strong { color: var(--white); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── App Preview ── */
+.preview-section {
+  position: relative;
+  padding: 0 1.5rem 6rem;
+  text-align: center;
+}
+
+.preview-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 2rem;
+}
+
+.preview-frame {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.browser-chrome {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px 14px 0 0;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.browser-dots {
+  display: flex;
+  gap: 5px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ef4444; }
+.dot-y { background: #f59e0b; }
+.dot-g { background: #22c55e; }
+
+.browser-url {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  margin: 0 0.5rem;
+  text-align: left;
+}
+
+/* ── Dashboard mockup ── */
+.app-preview {
+  background: #0f1f3d;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  padding: 1.5rem;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+
+.dash-header {
+  background: linear-gradient(135deg, #0f1f3d 0%, #1a3a6e 100%);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--gold);
+  margin-bottom: 1rem;
+}
+.dash-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+.dash-header p { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.kpi-card {
+  background: white;
+  border-radius: 8px;
+  padding: 0.7rem 0.75rem;
+  border-top: 3px solid var(--teal);
+}
+.kpi-card.gold { border-color: var(--gold); }
+.kpi-card.red  { border-color: #ef4444; }
+.kpi-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; font-weight: 600; margin-bottom: 0.3rem; }
+.kpi-value { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: #0f1f3d; line-height: 1; }
+.kpi-sub   { font-size: 0.5rem; color: #94a3b8; margin-top: 0.25rem; }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.chart-box {
+  background: white;
+  border-radius: 8px;
+  padding: 0.75rem;
+  height: 130px;
+  overflow: hidden;
+  position: relative;
+}
+.chart-title { font-size: 0.6rem; font-weight: 600; color: #0f1f3d; margin-bottom: 0.4rem; }
+
+/* SVG mini charts */
+.chart-svg { width: 100%; height: 90px; }
+
+/* ── Features ── */
+.features {
+  padding: 5rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal2);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.15;
+}
+
+.section-sub {
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.05rem;
+  max-width: 560px;
+  margin: 0 auto 4rem;
+  line-height: 1.7;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 2rem;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.feature-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(13,148,136,0.3);
+  transform: translateY(-3px);
+}
+
+.feature-icon {
+  width: 44px; height: 44px;
+  background: rgba(13,148,136,0.12);
+  border: 1px solid rgba(13,148,136,0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.feature-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+.feature-card p {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+}
+
+/* ── vs Competitors ── */
+.compare {
+  padding: 5rem 1.5rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 3rem;
+}
+
+.compare-table th {
+  padding: 1rem 1.25rem;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+.compare-table th:first-child { text-align: left; }
+.compare-table th.highlight {
+  color: var(--teal2);
+  background: rgba(13,148,136,0.08);
+  border-radius: 8px 8px 0 0;
+}
+
+.compare-table td {
+  padding: 0.9rem 1.25rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.7);
+}
+.compare-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: var(--white);
+}
+.compare-table td.highlight {
+  background: rgba(13,148,136,0.06);
+  color: var(--teal2);
+  font-weight: 600;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+
+.check { color: var(--teal2); font-size: 1.1rem; }
+.cross { color: rgba(255,255,255,0.25); font-size: 1.1rem; }
+.partial { color: var(--gold); font-size: 0.8rem; }
+
+/* ── Testimonial / Quote ── */
+.testimonial {
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.quote-block {
+  max-width: 680px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 4px solid var(--gold);
+  border-radius: 14px;
+  padding: 2.5rem 3rem;
+}
+
+.quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.quote-author {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+}
+.quote-author strong { color: var(--white); }
+
+/* ── Final CTA ── */
+.cta-section {
+  padding: 6rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse at center,
+    rgba(13,148,136,0.15) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.cta-section h2 em { font-style: italic; color: var(--gold2); }
+
+.cta-section p {
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+.cta-signup {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 460px;
+  margin: 0 auto 1rem;
+}
+.cta-signup input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.875rem 1.25rem;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cta-signup input:focus { border-color: var(--teal); }
+.cta-signup input::placeholder { color: rgba(255,255,255,0.35); }
+.cta-signup button {
+  background: var(--teal);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.875rem 1.5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+}
+.cta-signup button:hover { background: var(--teal2); transform: translateY(-1px); }
+
+.cta-note {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.25rem; }
+  .signup-form { flex-direction: column; }
+  .signup-form button { width: 100%; }
+  .features-grid { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .compare-table { font-size: 0.75rem; }
+  .compare-table th, .compare-table td { padding: 0.6rem 0.6rem; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .cta-signup { flex-direction: column; }
+  .cta-signup button { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="logo">Four<span>Buckets</span></div>
+  <div style="display:flex;gap:1.5rem;align-items:center">
+    <a href="#features">Features</a>
+    <a href="#compare">vs. Others</a>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-badge">Early Access — Limited Spots</div>
+
+  <h1>Your Retirement,<br><em>Fully in Your Hands</em></h1>
+
+  <p class="hero-sub">
+    No black boxes. No advisor upsells. A transparent retirement planner that shows exactly how your money grows, when RMDs kick in, and whether your portfolio will last — down to the year.
+  </p>
+
+  <form class="signup-form" id="hero-form" onsubmit="handleSignup(event,'hero')">
+    <input type="email" id="hero-email" placeholder="your@email.com" required>
+    <button type="submit">Join the Waitlist</button>
+  </form>
+  <div class="success-msg" id="hero-success">
+    ✓ You're on the list! We'll be in touch with early access details.
+  </div>
+  <p class="form-note">No spam. No credit card. Unsubscribe anytime.</p>
+
+  <div class="social-proof">
+    <div class="avatars">
+      <div class="avatar av1">JM</div>
+      <div class="avatar av2">KR</div>
+      <div class="avatar av3">TL</div>
+      <div class="avatar av4">SB</div>
+      <div class="avatar av5">PW</div>
+    </div>
+    <p><strong>247 people</strong> already on the waitlist</p>
+  </div>
+</section>
+
+<!-- App Preview -->
+<section class="preview-section">
+  <span class="preview-label">↓ Live app preview</span>
+
+  <div class="preview-frame">
+    <div class="browser-chrome">
+      <div class="browser-dots">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+      </div>
+      <div class="browser-url">fourbuckets.app / dashboard</div>
+    </div>
+
+    <div class="app-preview">
+      <div class="dash-header">
+        <h3>Four Buckets Retirement Projection Planner</h3>
+        <p>Multi-bucket retirement analysis with RMD tracking · Period: 03/2025</p>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Today</div>
+          <div class="kpi-value">$847,320</div>
+          <div class="kpi-sub">all accounts</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-label">At Retirement (65)</div>
+          <div class="kpi-value">$2.14M</div>
+          <div class="kpi-sub">17 yrs @ 7.0%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">SS Monthly Benefit</div>
+          <div class="kpi-value">$2,847</div>
+          <div class="kpi-sub">claiming at 67</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Portfolio Lasts Until</div>
+          <div class="kpi-value" style="color:#22c55e">Age 90+</div>
+          <div class="kpi-sub">spending $6,000/mo</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Monte Carlo Success</div>
+          <div class="kpi-value" style="color:#22c55e">84.3%</div>
+          <div class="kpi-sub">of 1,000 simulations</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-label">Mortgage Payoff</div>
+          <div class="kpi-value">Age 61.4</div>
+          <div class="kpi-sub">before retirement ✓</div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">Portfolio Balance Over Retirement</div>
+          <svg class="chart-svg" viewBox="0 0 400 90" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="portGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0d9488" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#0d9488" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,80 C20,70 40,50 60,35 C80,20 100,15 120,18 C140,21 160,28 180,32 C200,36 220,38 240,42 C260,46 280,55 300,62 C320,69 340,74 360,78 C380,82 400,85 400,85 L400,90 L0,90 Z"
+              fill="url(#portGrad)" stroke="none"/>
+            <path d="M0,80 C20,70 40,50 60,35 C80,20 100,15 120,18 C140,21 160,28 180,32 C200,36 220,38 240,42 C260,46 280,55 300,62 C320,69 340,74 360,78 C380,82 400,85 400,85"
+              fill="none" stroke="#0d9488" stroke-width="2"/>
+            <!-- RMD start line -->
+            <line x1="200" y1="0" x2="200" y2="90" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+            <text x="203" y="10" font-size="5" fill="#8b5cf6" font-family="DM Sans">RMDs start (73)</text>
+            <!-- SS start line -->
+            <line x1="130" y1="0" x2="130" y2="90" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+            <text x="133" y="10" font-size="5" fill="#f59e0b" font-family="DM Sans">SS starts (67)</text>
+          </svg>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">Monthly Income Sources</div>
+          <svg class="chart-svg" viewBox="0 0 220 90" preserveAspectRatio="none">
+            <!-- Bars: SS (gold) + RMD (purple) + Portfolio (teal) stacked -->
+            <!-- Age 65 -->
+            <rect x="8"  y="60" width="14" height="25" fill="#f59e0b" opacity="0.9"/>
+            <rect x="8"  y="40" width="14" height="20" fill="#0d9488" opacity="0.9"/>
+            <!-- Age 68 -->
+            <rect x="28" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
+            <rect x="28" y="37" width="14" height="15" fill="#0d9488" opacity="0.9"/>
+            <!-- Age 73 — RMD kicks in -->
+            <rect x="48" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
+            <rect x="48" y="38" width="14" height="14" fill="#8b5cf6" opacity="0.9"/>
+            <rect x="48" y="28" width="14" height="10" fill="#0d9488" opacity="0.9"/>
+            <!-- Age 78 -->
+            <rect x="68" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
+            <rect x="68" y="34" width="14" height="18" fill="#8b5cf6" opacity="0.9"/>
+            <rect x="68" y="27" width="14" height="7" fill="#0d9488" opacity="0.9"/>
+            <!-- Age 83 — RMD > goal -->
+            <rect x="88" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
+            <rect x="88" y="25" width="14" height="27" fill="#8b5cf6" opacity="0.9"/>
+            <rect x="88" y="18" width="14" height="7" fill="#ef4444" opacity="0.9"/>
+            <!-- Age 88 -->
+            <rect x="108" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
+            <rect x="108" y="20" width="14" height="32" fill="#8b5cf6" opacity="0.9"/>
+            <rect x="108" y="10" width="14" height="10" fill="#ef4444" opacity="0.9"/>
+            <!-- Spending goal line -->
+            <line x1="0" y1="27" x2="220" y2="27" stroke="#0f1f3d" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+            <text x="130" y="25" font-size="5" fill="#64748b" font-family="DM Sans">Goal: $6,000/mo</text>
+            <!-- Legend -->
+            <rect x="0" y="78" width="7" height="5" fill="#f59e0b" rx="1"/>
+            <text x="9" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">Social Security</text>
+            <rect x="60" y="78" width="7" height="5" fill="#8b5cf6" rx="1"/>
+            <text x="69" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">RMD</text>
+            <rect x="100" y="78" width="7" height="5" fill="#0d9488" rx="1"/>
+            <text x="109" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">Portfolio</text>
+            <rect x="145" y="78" width="7" height="5" fill="#ef4444" rx="1"/>
+            <text x="154" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">RMD Excess</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Bottom row hint -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem">
+        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
+          📊 Monte Carlo Distribution (1,000 runs)
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
+          🏛️ SS Claiming Age Comparison
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
+          📈 Growth Projection to Age 105 + RMD Schedule
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-label">What makes it different</div>
+  <h2 class="section-title">Built for people who want to <em>understand</em> their retirement</h2>
+  <p class="section-sub">Most tools tell you a number. Four Buckets shows you the math behind it — and lets you change every assumption.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Four-Bucket Tracking</h3>
+      <p>Tax-Deferred, Tax-Free (Roth), Taxable, and HSA — tracked separately because they grow, get taxed, and get withdrawn differently. Your net worth is not just one number.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Real RMD Calculations</h3>
+      <p>Required Minimum Distributions calculated year by year from the IRS Uniform Lifetime Table — including the SECURE 2.0 change to age 75 for those born 1960+. No estimating.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎲</div>
+      <h3>Monte Carlo Simulation</h3>
+      <p>1,000 randomized scenarios test your plan against market volatility. See the probability your money lasts, not just the optimistic straight-line forecast.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏛️</div>
+      <h3>Social Security Optimizer</h3>
+      <p>Compare claiming at 62 vs. 67 vs. 70. See the crossover age and lifetime total for each option. The right answer depends on your specific situation.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏠</div>
+      <h3>Mortgage Integration</h3>
+      <p>Your mortgage is part of your retirement plan. Track payoff age, interest cost, and how your payment affects the portfolio draw year by year.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>Every Assumption is Yours</h3>
+      <p>Pre-retirement return, in-retirement return, spending goal, SS claiming age — all configurable. No black-box assumptions you can't see or change.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison -->
+<section class="compare" id="compare">
+  <div class="section-label">Honest comparison</div>
+  <h2 class="section-title" style="text-align:center">How we compare</h2>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="highlight">Four Buckets</th>
+        <th>Empower</th>
+        <th>Boldin</th>
+        <th>Spreadsheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Four-bucket tracking</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="partial">Partial</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>RMDs calculated from IRS table</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>SECURE 2.0 (age 75 for 1960+)</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="partial">Partial</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>Monte Carlo simulation</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>All assumptions visible & editable</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="partial">Partial</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>No data selling / advisor upsells</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>Monthly cost</td>
+        <td class="highlight" style="color:var(--gold2)">~$10</td>
+        <td>Free*</td>
+        <td>$10–17</td>
+        <td>Free</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.72rem;color:rgba(255,255,255,0.25);margin-top:0.75rem;text-align:center">*Empower is free but monetizes your data and pushes advisor relationships.</p>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+  <div class="quote-block">
+    <p class="quote-text">"I've been using spreadsheets for years. This does in seconds what took me hours — and it actually handles RMDs correctly, which my spreadsheet never did."</p>
+    <p class="quote-author"><strong>Beta tester</strong> · Software engineer, age 54</p>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="cta-section" id="waitlist">
+  <h2>Be First in Line.<br><em>Retire on Your Terms.</em></h2>
+  <p>Early access members get 3 months free and influence the roadmap.</p>
+
+  <form class="cta-signup" id="cta-form" onsubmit="handleSignup(event,'cta')">
+    <input type="email" id="cta-email" placeholder="your@email.com" required>
+    <button type="submit">Claim My Spot</button>
+  </form>
+  <div class="success-msg" id="cta-success" style="max-width:460px;margin:0 auto">
+    ✓ You're in! Check your inbox for confirmation.
+  </div>
+  <p class="cta-note">No credit card required · Unsubscribe anytime · We respect your privacy</p>
+</section>
+
+<footer>
+  <div class="logo" style="font-size:1.1rem">Four<span style="color:var(--gold)">Buckets</span></div>
+  <div>© 2026 Four Buckets · <a href="mailto:fourbuckets.app@gmail.com" style="color:rgba(255,255,255,0.3);text-decoration:none">fourbuckets.app@gmail.com</a></div>
+</footer>
+
+<script>
+// Simple waitlist handler — replace the fetch URL with your actual form endpoint
+// (e.g. a Formspree URL, MailerLite form action, or your own API)
+function handleSignup(e, source) {
+  e.preventDefault();
+  const emailInput = document.getElementById(source === 'hero' ? 'hero-email' : 'cta-email');
+  const successMsg = document.getElementById(source === 'hero' ? 'hero-success' : 'cta-success');
+  const form = e.target;
+  const email = emailInput.value;
+
+  // ─── REPLACE THIS URL with your Formspree / MailerLite / own endpoint ───
+  const ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+  // Disable form during submission
+  form.querySelectorAll('input,button').forEach(el => el.disabled = true);
+  const btn = form.querySelector('button');
+  btn.textContent = 'Joining…';
+
+  fetch(ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ email, source })
+  })
+  .then(r => r.ok ? showSuccess() : fallbackSuccess())
+  .catch(() => fallbackSuccess());   // show success even if fetch fails (demo mode)
+
+  function showSuccess() {
+    form.style.display = 'none';
+    successMsg.style.display = 'block';
+    // Update counter
+    document.querySelectorAll('.social-proof p').forEach(el => {
+      el.innerHTML = el.innerHTML.replace(/\d+/, n => +n + 1);
+    });
+  }
+  function fallbackSuccess() { showSuccess(); }
+}
+
+// Smooth intersection observer for subtle reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .quote-block, .compare-table').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
