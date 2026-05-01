@@ -269,11 +269,6 @@ h1 em {
   color: var(--navy);
 }
 .avatar:first-child { margin-left: 0; }
-.av1 { background: #7dd3fc; }
-.av2 { background: #86efac; }
-.av3 { background: #fbbf24; }
-.av4 { background: #f9a8d4; }
-.av5 { background: #c4b5fd; }
 
 .social-proof p {
   font-size: 0.85rem;
@@ -678,8 +673,6 @@ footer {
 
 <!-- Hero -->
 <section class="hero" id="top">
-  <div class="hero-badge">Early Access — Limited Spots</div>
-
   <h1>Your Retirement,<br><em>Fully in Your Hands</em></h1>
 
   <p class="hero-sub">
@@ -696,14 +689,7 @@ footer {
   <p class="form-note">No spam. No credit card. Unsubscribe anytime.</p>
 
   <div class="social-proof">
-    <div class="avatars">
-      <div class="avatar av1">JM</div>
-      <div class="avatar av2">KR</div>
-      <div class="avatar av3">TL</div>
-      <div class="avatar av4">SB</div>
-      <div class="avatar av5">PW</div>
-    </div>
-    <p><strong>259 people</strong> already on the waitlist</p>
+    <p>Built by a software engineer who got tired of retirement tools that hide the math.</p>
   </div>
 </section>
 
@@ -953,11 +939,11 @@ footer {
   <p style="font-size:0.72rem;color:rgba(255,255,255,0.25);margin-top:0.75rem;text-align:center">*Empower is free but monetizes your data and pushes advisor relationships.</p>
 </section>
 
-<!-- Testimonial -->
+<!-- Founder note -->
 <section class="testimonial">
   <div class="quote-block">
-    <p class="quote-text">"I've been using spreadsheets for years. This does in seconds what took me hours — and it actually handles RMDs correctly, which my spreadsheet never did."</p>
-    <p class="quote-author"><strong>Beta tester</strong> · Software engineer, age 54</p>
+    <p class="quote-text">"I built Four Buckets because every retirement tool I tried either hid its math, sold my data, or pushed me toward an advisor. I wanted to see exactly how RMDs, Social Security timing, and bucket sequencing actually played out — year by year, with every assumption editable. So I built it for myself first. The waitlist is open if you want it too."</p>
+    <p class="quote-author"><strong>The founder</strong> · Why I'm building this</p>
   </div>
 </section>
 
@@ -1010,10 +996,6 @@ function handleSignup(e, source) {
   function showSuccess() {
     form.style.display = 'none';
     successMsg.style.display = 'block';
-    // Update counter
-    document.querySelectorAll('.social-proof p').forEach(el => {
-      el.innerHTML = el.innerHTML.replace(/\d+/, n => +n + 1);
-    });
   }
   function fallbackSuccess() { showSuccess(); }
 }
