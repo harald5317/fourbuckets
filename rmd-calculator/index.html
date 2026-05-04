@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free RMD Calculator (2026) — SECURE 2.0 Compliant | Four Buckets</title>
+<meta name="description" content="Calculate your Required Minimum Distributions year by year using the official IRS Uniform Lifetime Table. Updated for SECURE 2.0. Free, no email required.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://fourbuckets.app/rmd-calculator/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Free RMD Calculator (2026) — SECURE 2.0 Compliant">
+<meta property="og:description" content="Calculate your Required Minimum Distributions year by year using the official IRS Uniform Lifetime Table. Updated for SECURE 2.0. Free, no email required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fourbuckets.app/rmd-calculator/">
+<meta property="og:site_name" content="Four Buckets">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/shared.css">
+
+<!-- FAQ schema (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the SECURE 2.0 Act?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The SECURE 2.0 Act, signed into law in December 2022, is retirement-focused legislation that updated several rules for tax-advantaged accounts. Most relevant for RMDs: it raised the age at which Required Minimum Distributions begin. Before SECURE 2.0, RMDs began at age 72. Under SECURE 2.0, RMDs begin at age 73 for individuals born between 1951 and 1959, and at age 75 for those born in 1960 or later. The act did not change the IRS Uniform Lifetime Table itself — it only changed the age at which an account holder begins using it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to take an RMD from a Roth IRA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Roth IRAs are not subject to RMDs during the original owner's lifetime. As of 2024, Roth 401(k) and Roth 403(b) accounts also no longer require RMDs during the owner's lifetime under SECURE 2.0. RMDs can apply to inherited Roth accounts, depending on the beneficiary type and when the original owner died. This calculator is for tax-deferred accounts (Traditional IRA, 401(k), 403(b), 457(b), etc.), not Roth accounts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I miss an RMD?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Missing an RMD triggers an excise tax on the amount you should have withdrawn but didn't. SECURE 2.0 reduced this penalty from 50% to 25% of the shortfall. The penalty drops further to 10% if you correct the mistake — by withdrawing the missed amount and filing IRS Form 5329 — within the 'correction window,' generally two years from the end of the year in which the RMD was due. If the failure was due to reasonable error and you take steps to remedy it, the IRS may waive the penalty entirely upon request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are inherited IRAs different?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Inherited IRAs follow different rules. For most non-spouse beneficiaries who inherited an IRA after the SECURE Act of 2019, the entire inherited account must be withdrawn within 10 years of the original owner's death (the '10-year rule'). Spouse beneficiaries have additional options, including treating the inherited IRA as their own. Eligible designated beneficiaries — including minor children of the owner, disabled or chronically ill individuals, and beneficiaries less than 10 years younger than the owner — can still use life-expectancy distributions. This calculator is intended for an account owner's own RMDs, not inherited account RMDs; consult IRS Pub 590-B or a qualified advisor for inherited-account scenarios."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   Page-specific styles for the RMD Calculator
+   Foundational styles (palette, body, nav, footer) live in
+   /css/shared.css.
+   ============================================================ */
+
+main { position: relative; z-index: 1; }
+
+/* ── Page header / intro ── */
+.page-header {
+  padding: 7rem 1.5rem 3rem;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.page-header .eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  background: rgba(212,168,50,0.12);
+  border: 1px solid rgba(212,168,50,0.3);
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.1rem, 4.6vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+h1 em { font-style: italic; color: var(--teal2); }
+
+.intro-text {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.75;
+  text-align: left;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.intro-text p + p { margin-top: 1rem; }
+
+/* ── Calculator section ── */
+.calculator {
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+.calc-form, .result-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 2rem;
+}
+
+.calc-form h2, .result-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+}
+
+.form-grid .full { grid-column: 1 / -1; }
+
+.input-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+.input-group .help {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
+.input-group input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+.input-group input::placeholder { color: rgba(255,255,255,0.3); }
+.input-group input:focus {
+  border-color: var(--teal);
+  background: rgba(255,255,255,0.10);
+}
+.input-group input.error {
+  border-color: rgba(239,68,68,0.6);
+}
+
+.input-group .with-suffix {
+  position: relative;
+}
+.input-group .with-suffix input { padding-right: 2.2rem; }
+.input-group .with-suffix .suffix {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.field-error {
+  color: #fca5a5;
+  font-size: 0.72rem;
+  margin-top: 0.35rem;
+  min-height: 1em;
+}
+
+/* spouse field is hidden until "add spouse" toggled */
+.spouse-toggle {
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: border-color 0.18s, color 0.18s;
+}
+.spouse-toggle:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+.spouse-toggle::before { content: '+ '; color: var(--gold); margin-right: 0.2em; }
+.spouse-toggle.expanded { display: none; }
+
+#spouse-section { display: none; }
+#spouse-section.expanded { display: contents; }
+
+/* ── Result card ── */
+.result-card { display: flex; flex-direction: column; }
+
+.result-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 0.6rem;
+}
+
+.result-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  color: var(--white);
+}
+.result-headline .amount {
+  color: var(--gold2);
+  font-style: italic;
+}
+.result-headline .age, .result-headline .year { color: var(--teal2); }
+
+.result-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.result-note {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.55;
+  background: rgba(13,148,136,0.06);
+  border-left: 3px solid var(--teal);
+  padding: 0.7rem 0.9rem;
+  border-radius: 0 6px 6px 0;
+}
+.result-note.gold {
+  background: rgba(212,168,50,0.06);
+  border-left-color: var(--gold);
+}
+.result-note strong { color: var(--white); font-weight: 600; }
+
+.result-empty {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  line-height: 1.6;
+}
+
+/* ── Results detail (chart + table) ── */
+.results-detail {
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.results-detail.hidden { display: none; }
+
+.chart-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.chart-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.chart-wrap .chart-container {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+.table-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.table-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.results-table th, .results-table td {
+  padding: 0.7rem 1rem;
+  text-align: right;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  white-space: nowrap;
+}
+.results-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  background: rgba(255,255,255,0.03);
+}
+.results-table th:first-child, .results-table td:first-child {
+  text-align: left;
+  padding-left: 1.5rem;
+}
+.results-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.results-table tbody tr:last-child td { border-bottom: none; }
+
+.table-footnote {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  line-height: 1.5;
+}
+
+/* ── Waitlist CTA box ── */
+.waitlist-cta-box {
+  max-width: 760px;
+  margin: 3rem auto;
+  padding: 2rem 2.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,168,50,0.3);
+  border-left: 4px solid var(--gold);
+  border-radius: 14px;
+  text-align: center;
+}
+.waitlist-cta-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.waitlist-cta-box p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+.waitlist-cta-box a {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s, transform 0.15s;
+}
+.waitlist-cta-box a:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* ── FAQ ── */
+.faq-section {
+  max-width: 800px;
+  margin: 4rem auto 5rem;
+  padding: 0 1.5rem;
+}
+.faq-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.faq details {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+.faq details[open] {
+  border-color: rgba(13,148,136,0.3);
+  background: rgba(255,255,255,0.05);
+}
+.faq summary {
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  list-style: none;
+  position: relative;
+  padding-right: 1.5rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--gold);
+  transition: transform 0.2s;
+}
+.faq details[open] summary::after { content: '−'; }
+.faq details > div {
+  margin-top: 0.85rem;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+}
+.faq details > div p + p { margin-top: 0.75rem; }
+
+/* ── Disclaimer ── */
+.disclaimer {
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-header { padding: 6rem 1.25rem 2rem; }
+  .calculator { grid-template-columns: 1fr; gap: 1rem; padding: 0 1.25rem; }
+  .calc-form, .result-card { padding: 1.5rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .results-detail { padding: 0 1.25rem; }
+  .chart-wrap .chart-container { height: 260px; }
+  .results-table { font-size: 0.78rem; }
+  .results-table th, .results-table td { padding: 0.55rem 0.6rem; }
+  .results-table th:first-child, .results-table td:first-child { padding-left: 0.85rem; }
+  .waitlist-cta-box { padding: 1.5rem 1.25rem; margin: 2rem 1.25rem; }
+  .faq-section { padding: 0 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav (mirrors landing page; aria-current marks this page) -->
+<nav>
+  <a href="/" class="logo">Four<span>Buckets</span></a>
+  <div class="nav-links" style="display:flex;gap:1.5rem;align-items:center">
+    <a href="/#features">Features</a>
+    <a href="/#compare">vs. Others</a>
+    <a href="/rmd-calculator/" aria-current="page">Free Tools</a>
+    <a href="/#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<main>
+
+<header class="page-header">
+  <span class="eyebrow">Free Tool · Updated for 2026</span>
+  <h1>RMD Calculator: When Your Required Distributions <em>Start and How Much</em></h1>
+  <div class="intro-text">
+    <p>Required Minimum Distributions (RMDs) are the annual withdrawals the IRS forces you to take from tax-deferred retirement accounts — Traditional IRAs, 401(k)s, 403(b)s, 457(b)s, SEP and SIMPLE IRAs — once you reach a certain age. The amount is determined by dividing your prior-year-end balance by a divisor from the IRS Uniform Lifetime Table (Pub 590-B, Appendix B, Table III).</p>
+    <p>Under the SECURE 2.0 Act of 2022, the start age depends on when you were born: age 72 if you were born before 1951, age 73 if you were born 1951–1959, and age 75 if you were born in 1960 or later. This calculator applies the correct start age automatically and projects your year-by-year RMD using the official IRS table values. If your spouse is your sole beneficiary <em>and</em> more than 10 years younger than you, it switches to the IRS Joint Life and Last Survivor Expectancy Table (Table II), which produces smaller RMDs.</p>
+  </div>
+</header>
+
+<!-- Calculator -->
+<section class="calculator">
+  <form class="calc-form" id="rmd-form" onsubmit="event.preventDefault()">
+    <h2>Your details</h2>
+    <div class="form-grid">
+
+      <div class="input-group full">
+        <label for="dob">Your date of birth</label>
+        <input type="date" id="dob" autocomplete="bday" max="2010-12-31" min="1920-01-01">
+        <div class="field-error" id="err-dob"></div>
+      </div>
+
+      <div class="input-group full">
+        <label for="balance">Tax-deferred balance today</label>
+        <div class="with-suffix">
+          <input type="text" id="balance" inputmode="numeric" placeholder="500,000" autocomplete="off">
+          <span class="suffix">$</span>
+        </div>
+        <div class="help">Combined 401(k), 403(b), Traditional IRA, etc. (not Roth).</div>
+        <div class="field-error" id="err-balance"></div>
+      </div>
+
+      <div class="input-group">
+        <label for="returnPre">Return until RMD age</label>
+        <div class="with-suffix">
+          <input type="number" id="returnPre" step="0.1" value="6.0" min="-10" max="20">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="returnPost">Return during RMDs</label>
+        <div class="with-suffix">
+          <input type="number" id="returnPost" step="0.1" value="5.0" min="-10" max="20">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <button type="button" class="spouse-toggle full" id="spouse-toggle" onclick="toggleSpouse()">Add spouse's date of birth (optional, for Joint Life Table)</button>
+
+      <div class="input-group full" id="spouse-section">
+        <label for="spouse-dob">Spouse's date of birth</label>
+        <input type="date" id="spouse-dob" autocomplete="off" max="2010-12-31" min="1920-01-01">
+        <div class="help">Only used if your spouse is more than 10 years younger and your sole beneficiary.</div>
+        <div class="field-error" id="err-spouse-dob"></div>
+      </div>
+
+    </div>
+  </form>
+
+  <aside class="result-card" aria-live="polite">
+    <span class="result-status">Your result</span>
+    <div id="headline"><p class="result-empty">Enter your date of birth and current balance to see your projected RMDs.</p></div>
+    <div class="result-meta" id="result-meta"></div>
+  </aside>
+</section>
+
+<!-- Detail (chart + table) -->
+<section class="results-detail hidden" id="results-detail">
+  <div class="chart-wrap">
+    <h3>Projected RMD by year</h3>
+    <div class="chart-container"><canvas id="rmd-chart"></canvas></div>
+  </div>
+
+  <div class="table-wrap">
+    <h3>Year-by-year breakdown</h3>
+    <div class="table-scroll">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Divisor</th>
+            <th>Projected balance</th>
+            <th>RMD amount</th>
+          </tr>
+        </thead>
+        <tbody id="results-tbody"></tbody>
+      </table>
+    </div>
+    <div class="table-footnote" id="table-footnote"></div>
+  </div>
+</section>
+
+<!-- Waitlist CTA -->
+<aside class="waitlist-cta-box">
+  <h3>Want to see this as part of your full retirement plan?</h3>
+  <p>Four Buckets is a complete retirement planner that connects your RMDs, Social Security, and other accounts into one projection. Currently in beta.</p>
+  <a href="/#waitlist">Join the waitlist →</a>
+</aside>
+
+<!-- FAQ -->
+<section class="faq-section faq">
+  <h2>Frequently asked questions</h2>
+
+  <details>
+    <summary>What is the SECURE 2.0 Act?</summary>
+    <div>
+      <p>The SECURE 2.0 Act, signed into law in December 2022, is retirement-focused legislation that updated several rules for tax-advantaged accounts. Most relevant for RMDs: it raised the age at which Required Minimum Distributions begin.</p>
+      <p>Before SECURE 2.0, RMDs began at age 72. Under SECURE 2.0:</p>
+      <p>• If you were born <strong>before 1951</strong>, RMDs begin at age 72 (rules in effect before SECURE 2.0).<br>
+         • If you were born <strong>1951–1959</strong>, RMDs begin at age 73.<br>
+         • If you were born <strong>1960 or later</strong>, RMDs begin at age 75.</p>
+      <p>The act did not change the IRS Uniform Lifetime Table itself — it only changed the age at which an account holder begins using it. Whatever your start age, you look up the divisor for that age in the same table.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Do I have to take an RMD from a Roth IRA?</summary>
+    <div>
+      <p>No. Roth IRAs are not subject to RMDs during the original owner's lifetime. As of 2024, Roth 401(k) and Roth 403(b) accounts also no longer require RMDs during the owner's lifetime under SECURE 2.0.</p>
+      <p>RMDs can still apply to <em>inherited</em> Roth accounts, depending on the beneficiary type and when the original owner died. This calculator is for tax-deferred accounts (Traditional IRA, 401(k), 403(b), 457(b), SEP IRA, SIMPLE IRA, etc.), not Roth accounts.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>What happens if I miss an RMD?</summary>
+    <div>
+      <p>Missing an RMD triggers an excise tax on the amount you should have withdrawn but didn't. SECURE 2.0 reduced this penalty from 50% to <strong>25%</strong> of the shortfall.</p>
+      <p>The penalty drops further to <strong>10%</strong> if you correct the mistake — by withdrawing the missed amount and filing IRS Form 5329 — within the "correction window," generally two years from the end of the year in which the RMD was due.</p>
+      <p>If the failure was due to reasonable error and you take steps to remedy it, the IRS may waive the penalty entirely upon request. The deadline for taking your annual RMD is December 31 each year, except for your <em>first</em> RMD, which can be deferred to April 1 of the following year. Doing so means you take two RMDs in that next year.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Are inherited IRAs different?</summary>
+    <div>
+      <p>Yes. Inherited IRAs follow different rules. For most non-spouse beneficiaries who inherited an IRA after the SECURE Act of 2019, the entire inherited account must be withdrawn within <strong>10 years</strong> of the original owner's death (the "10-year rule").</p>
+      <p>Spouse beneficiaries have additional options, including treating the inherited IRA as their own. Eligible designated beneficiaries — including minor children of the owner, disabled or chronically ill individuals, and beneficiaries less than 10 years younger than the owner — can still use life-expectancy distributions from the IRS Single Life Table.</p>
+      <p>This calculator is intended for an account owner's <em>own</em> RMDs. For inherited-account scenarios, consult IRS Publication 590-B or a qualified tax advisor.</p>
+    </div>
+  </details>
+</section>
+
+<p class="disclaimer">
+  This calculator is provided for educational purposes only and does not constitute tax, legal, or financial advice. Divisor values come from IRS Pub 590-B Appendix B, Tables II and III, as effective Jan 1, 2022. Projections assume constant returns and uniform contributions/withdrawals; actual results will differ. Consult a qualified tax professional for decisions involving your specific situation.
+</p>
+
+</main>
+
+<footer>
+  <a href="/" class="logo" style="font-size:1.1rem">Four<span>Buckets</span></a>
+  <div>© 2026 Four Buckets · <a href="mailto:hello@fourbuckets.app">hello@fourbuckets.app</a></div>
+</footer>
+
+<!-- Joint Life Table II (separate file: ~50KB of IRS data) -->
+<script src="joint-life-table.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+
+<script>
+// ============================================================
+// IRS Uniform Lifetime Table III — Pub 590-B Appendix B,
+// Treas. Reg. § 1.401(a)(9)-9(c) as amended by TD 9930 (Nov 2020),
+// effective for distributions on or after Jan 1, 2022.
+// ============================================================
+const UNIFORM_LIFETIME_TABLE = {
+   72: 27.4,  73: 26.5,  74: 25.5,  75: 24.6,  76: 23.7,  77: 22.9,  78: 22.0,  79: 21.1,
+   80: 20.2,  81: 19.4,  82: 18.5,  83: 17.7,  84: 16.8,  85: 16.0,  86: 15.2,  87: 14.4,
+   88: 13.7,  89: 12.9,  90: 12.2,  91: 11.5,  92: 10.8,  93: 10.1,  94:  9.5,  95:  8.9,
+   96:  8.4,  97:  7.8,  98:  7.3,  99:  6.8, 100:  6.4, 101:  6.0, 102:  5.6, 103:  5.2,
+  104:  4.9, 105:  4.6, 106:  4.3, 107:  4.1, 108:  3.9, 109:  3.7, 110:  3.5, 111:  3.4,
+  112:  3.3, 113:  3.1, 114:  3.0, 115:  2.9, 116:  2.8, 117:  2.7, 118:  2.5, 119:  2.3,
+  120:  2.0
+};
+
+const PROJECTION_END_AGE = 95;
+const fmtUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const fmtUSDcents = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const fmtNum = new Intl.NumberFormat('en-US');
+
+// SECURE 2.0 RMD start age based on birth year
+function rmdStartAge(birthYear) {
+  if (birthYear < 1951) return 72;
+  if (birthYear < 1960) return 73; // 1951–1959 inclusive
+  return 75;                       // 1960+
+}
+
+function uniformDivisor(age) {
+  if (age < 72) return null;
+  return UNIFORM_LIFETIME_TABLE[Math.min(120, age)];
+}
+
+// Joint Life Table II lookup. The source table covers ages 20–120 in both
+// directions; the original IRS table is symmetric (joint life expectancy
+// of two ages doesn't depend on order). If a cell isn't populated, swap
+// owner/spouse and try again. Clamp to [20, 120] for safety.
+function jointLifeDivisor(ownerAge, spouseAge) {
+  const t = (typeof JOINT_LIFE_TABLE !== 'undefined') ? JOINT_LIFE_TABLE : null;
+  if (!t) return null;
+  const a = Math.max(20, Math.min(120, ownerAge));
+  const b = Math.max(20, Math.min(120, spouseAge));
+  if (t[a] && t[a][b] !== undefined) return t[a][b];
+  if (t[b] && t[b][a] !== undefined) return t[b][a];
+  return null;
+}
+
+// Parse a YYYY-MM-DD <input type="date"> value into a UTC Date (avoids tz drift)
+function parseDate(s) {
+  if (!s) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (!m) return null;
+  const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+  if (isNaN(d.getTime())) return null;
+  return d;
+}
+
+// Strip $ , spaces from balance input; return number or NaN
+function parseBalance(s) {
+  if (s === null || s === undefined) return NaN;
+  const cleaned = String(s).replace(/[\s,$_]/g, '');
+  if (cleaned === '') return NaN;
+  return Number(cleaned);
+}
+
+// Pretty-format the balance field on blur
+function formatBalanceField() {
+  const el = document.getElementById('balance');
+  const n = parseBalance(el.value);
+  if (Number.isFinite(n) && n >= 0) {
+    el.value = fmtNum.format(Math.round(n));
+  }
+}
+
+// Determine which Uniform Lifetime Table version is referenced for the user.
+// We use one canonical post-2022 table (TD 9930) for all users — SECURE 2.0
+// changed the start age, not the divisors. The note explains which start
+// age applies to this specific birth year.
+function startAgeNote(birthYear) {
+  if (birthYear < 1951) {
+    return `Because you were born before 1951, RMDs begin at age 72 under the rules in place before SECURE 2.0.`;
+  } else if (birthYear < 1960) {
+    return `Because you were born between 1951 and 1959, the SECURE 2.0 Act sets your RMD start age at 73.`;
+  } else {
+    return `Because you were born in 1960 or later, the SECURE 2.0 Act sets your RMD start age at 75 — two years later than for people born before 1960.`;
+  }
+}
+
+// ============================================================
+// Core projection
+// ============================================================
+function project(inputs) {
+  const { birthDate, balance, returnPre, returnPost, spouseBirthDate } = inputs;
+
+  const today = new Date();
+  const currentYear = today.getUTCFullYear();
+  const birthYear = birthDate.getUTCFullYear();
+  const triggerAge = rmdStartAge(birthYear);
+  const firstRmdYear = birthYear + triggerAge;
+  const ageThisYear = currentYear - birthYear;
+
+  const isAlreadyTakingRmds = ageThisYear >= triggerAge;
+
+  // Joint Life eligibility: spouse strictly more than 10 years younger
+  let useJointLife = false;
+  let ageGap = null;
+  let spouseBirthYear = null;
+  if (spouseBirthDate) {
+    spouseBirthYear = spouseBirthDate.getUTCFullYear();
+    ageGap = spouseBirthYear - birthYear; // positive = spouse younger
+    if (ageGap > 10) useJointLife = true;
+  }
+
+  // Compound today's balance up to the start of the projection (Dec 31 of
+  // the year before the first RMD year). For users already past the start
+  // age, treat today's balance as the prior-year-end basis directly.
+  let priorEndBalance, startYear;
+  if (isAlreadyTakingRmds) {
+    startYear = currentYear;
+    priorEndBalance = balance;
+  } else {
+    const yearsToCompound = firstRmdYear - currentYear;
+    priorEndBalance = balance * Math.pow(1 + returnPre, yearsToCompound);
+    startYear = firstRmdYear;
+  }
+
+  const endYear = birthYear + PROJECTION_END_AGE;
+  const rows = [];
+  const tableUsed = new Set();
+
+  for (let y = startYear; y <= endYear; y++) {
+    const ownerAge = y - birthYear;
+    if (ownerAge > 120) break;
+
+    let divisor = null;
+    let tableLabel = 'Uniform Lifetime III';
+    if (useJointLife) {
+      const spouseAge = y - spouseBirthYear;
+      const d = jointLifeDivisor(ownerAge, spouseAge);
+      if (d !== null) {
+        divisor = d;
+        tableLabel = 'Joint Life II';
+      } else {
+        divisor = uniformDivisor(ownerAge); // fallback
+      }
+    } else {
+      divisor = uniformDivisor(ownerAge);
+    }
+    if (divisor === null || divisor <= 0) continue;
+    tableUsed.add(tableLabel);
+
+    const rmd = priorEndBalance / divisor;
+    const balanceBefore = priorEndBalance;
+    const endBalance = (priorEndBalance - rmd) * (1 + returnPost);
+    rows.push({ year: y, age: ownerAge, divisor, balanceBefore, rmd, endBalance, tableLabel });
+    priorEndBalance = endBalance;
+  }
+
+  return {
+    triggerAge,
+    firstRmdYear: rows.length ? rows[0].year : firstRmdYear,
+    firstRmdAge:  rows.length ? rows[0].age  : triggerAge,
+    firstRmdAmount: rows.length ? rows[0].rmd : 0,
+    isAlreadyTakingRmds,
+    useJointLife,
+    ageGap,
+    birthYear,
+    spouseBirthYear,
+    tableUsed: [...tableUsed],
+    rows
+  };
+}
+
+// ============================================================
+// Validation + UI binding
+// ============================================================
+function readInputs() {
+  const errors = {};
+  const dobStr = document.getElementById('dob').value;
+  const balanceRaw = document.getElementById('balance').value;
+  const returnPreStr = document.getElementById('returnPre').value;
+  const returnPostStr = document.getElementById('returnPost').value;
+  const spouseDobStr = document.getElementById('spouse-dob').value;
+  const spouseExpanded = document.getElementById('spouse-section').classList.contains('expanded');
+
+  const birthDate = parseDate(dobStr);
+  if (!dobStr) {
+    errors.dob = '';                         // empty — silent, just don't compute
+  } else if (!birthDate) {
+    errors.dob = 'Enter a valid date.';
+  } else {
+    const today = new Date();
+    const ageNow = today.getUTCFullYear() - birthDate.getUTCFullYear();
+    if (ageNow < 18) errors.dob = 'You must be at least 18.';
+    else if (ageNow > 110) errors.dob = 'Please enter a realistic date of birth.';
+  }
+
+  const balance = parseBalance(balanceRaw);
+  if (balanceRaw === '') {
+    errors.balance = '';
+  } else if (!Number.isFinite(balance) || balance < 0) {
+    errors.balance = 'Enter a valid balance.';
+  } else if (balance > 1e12) {
+    errors.balance = 'Balance is unrealistically large.';
+  }
+
+  const returnPre = Number(returnPreStr) / 100;
+  const returnPost = Number(returnPostStr) / 100;
+  const validReturns = Number.isFinite(returnPre) && Number.isFinite(returnPost)
+    && returnPre >= -0.10 && returnPre <= 0.20
+    && returnPost >= -0.10 && returnPost <= 0.20;
+
+  let spouseBirthDate = null;
+  if (spouseExpanded && spouseDobStr) {
+    spouseBirthDate = parseDate(spouseDobStr);
+    if (!spouseBirthDate) errors.spouseDob = 'Enter a valid date.';
+    else if (birthDate) {
+      // sanity: spouse age now must be reasonable
+      const today = new Date();
+      const spAge = today.getUTCFullYear() - spouseBirthDate.getUTCFullYear();
+      if (spAge < 18 || spAge > 110) errors.spouseDob = 'Please enter a realistic date of birth.';
+    }
+  }
+
+  return {
+    errors,
+    valid: !errors.dob && !errors.balance && !errors.spouseDob &&
+           birthDate && Number.isFinite(balance) && balance > 0 && validReturns,
+    inputs: { birthDate, balance, returnPre, returnPost, spouseBirthDate }
+  };
+}
+
+function paintErrors(errors) {
+  for (const [key, fieldId, errId] of [
+    ['dob', 'dob', 'err-dob'],
+    ['balance', 'balance', 'err-balance'],
+    ['spouseDob', 'spouse-dob', 'err-spouse-dob']
+  ]) {
+    const msg = errors[key];
+    const field = document.getElementById(fieldId);
+    const errEl = document.getElementById(errId);
+    if (msg) {
+      field.classList.add('error');
+      errEl.textContent = msg;
+    } else {
+      field.classList.remove('error');
+      errEl.textContent = '';
+    }
+  }
+}
+
+function clearResult(message) {
+  document.getElementById('headline').innerHTML =
+    `<p class="result-empty">${message || 'Enter your date of birth and current balance to see your projected RMDs.'}</p>`;
+  document.getElementById('result-meta').innerHTML = '';
+  document.getElementById('results-detail').classList.add('hidden');
+  destroyChart();
+}
+
+function renderResult(result, inputs) {
+  const headline = document.getElementById('headline');
+  const meta = document.getElementById('result-meta');
+
+  const amountStr = fmtUSD.format(Math.round(result.firstRmdAmount));
+
+  let headlineHtml;
+  if (result.isAlreadyTakingRmds) {
+    headlineHtml =
+      `Your <span class="year">${result.firstRmdYear}</span> RMD ` +
+      `(at age <span class="age">${result.firstRmdAge}</span>) ` +
+      `is approximately <span class="amount">${amountStr}</span>.`;
+  } else {
+    headlineHtml =
+      `Your first RMD will be in <span class="year">${result.firstRmdYear}</span> ` +
+      `at age <span class="age">${result.firstRmdAge}</span>, ` +
+      `for approximately <span class="amount">${amountStr}</span>.`;
+  }
+  headline.innerHTML = `<div class="result-headline">${headlineHtml}</div>`;
+
+  // Notes
+  const notes = [];
+  notes.push({
+    cls: '',
+    html: `<strong>Why this start age?</strong> ${startAgeNote(result.birthYear)}`
+  });
+
+  if (result.useJointLife) {
+    const gap = result.ageGap;
+    notes.push({
+      cls: 'gold',
+      html: `<strong>Using Joint Life Table II.</strong> Your spouse is ${gap} years younger than you. ` +
+            `Because that's more than 10 years and assuming your spouse is your sole beneficiary, ` +
+            `the IRS lets you use the Joint Life and Last Survivor Expectancy Table, which produces smaller RMDs ` +
+            `than the Uniform Lifetime Table.`
+    });
+  } else if (result.ageGap !== null) {
+    const gap = result.ageGap;
+    if (gap > 0) {
+      notes.push({
+        cls: '',
+        html: `Your spouse is ${gap} year${gap === 1 ? '' : 's'} younger. ` +
+              `Joint Life Table II only applies when the spouse is <strong>more than 10 years</strong> younger ` +
+              `<em>and</em> the sole beneficiary, so this calculation uses the Uniform Lifetime Table.`
+      });
+    }
+  }
+
+  meta.innerHTML = notes.map(n => `<div class="result-note ${n.cls}">${n.html}</div>`).join('');
+
+  // Detail section
+  document.getElementById('results-detail').classList.remove('hidden');
+  renderTable(result);
+  renderChart(result);
+}
+
+function renderTable(result) {
+  const tbody = document.getElementById('results-tbody');
+  tbody.innerHTML = result.rows.map(r => `
+    <tr>
+      <td>${r.year}</td>
+      <td>${r.age}</td>
+      <td>${r.divisor.toFixed(1)}</td>
+      <td>${fmtUSD.format(Math.round(r.balanceBefore))}</td>
+      <td>${fmtUSD.format(Math.round(r.rmd))}</td>
+    </tr>
+  `).join('');
+
+  const tables = result.tableUsed.join(' and ');
+  document.getElementById('table-footnote').innerHTML =
+    `Divisors sourced from IRS Pub 590-B Appendix B (${tables}). ` +
+    `"Projected balance" is the value on Dec 31 of the prior year. ` +
+    `Each year's balance is grown at your "return during RMDs" assumption after that year's RMD is withdrawn.`;
+}
+
+let chartInstance = null;
+function destroyChart() { if (chartInstance) { chartInstance.destroy(); chartInstance = null; } }
+
+function renderChart(result) {
+  if (typeof Chart === 'undefined') {
+    // Chart.js still loading; try once more after it loads
+    window.addEventListener('load', () => renderChart(result), { once: true });
+    return;
+  }
+  destroyChart();
+  const ctx = document.getElementById('rmd-chart').getContext('2d');
+  const labels = result.rows.map(r => r.year);
+  const data = result.rows.map(r => Math.round(r.rmd));
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'RMD',
+        data,
+        backgroundColor: 'rgba(13, 148, 136, 0.65)',
+        borderColor: 'rgba(20, 184, 166, 1)',
+        borderWidth: 1,
+        borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(13,27,42,0.95)',
+          titleColor: '#f0c040',
+          bodyColor: '#fff',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            title: (items) => `Year ${items[0].label}`,
+            label: (item) => `RMD: ${fmtUSD.format(item.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: 'rgba(255,255,255,0.55)', maxRotation: 0, autoSkipPadding: 12 },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          ticks: {
+            color: 'rgba(255,255,255,0.55)',
+            callback: (v) => '$' + fmtNum.format(v)
+          },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Wire-up: debounced recalc on any input change
+// ============================================================
+let debounceTimer = null;
+function recalcSoon() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(recalcNow, 250);
+}
+function recalcNow() {
+  const r = readInputs();
+  paintErrors(r.errors);
+  if (!r.valid) {
+    clearResult();
+    return;
+  }
+  const result = project(r.inputs);
+  if (!result.rows.length) {
+    clearResult('No RMD years to project — check your date of birth and balance.');
+    return;
+  }
+  renderResult(result, r.inputs);
+}
+
+function toggleSpouse() {
+  const sec = document.getElementById('spouse-section');
+  const btn = document.getElementById('spouse-toggle');
+  sec.classList.add('expanded');
+  btn.classList.add('expanded');
+  document.getElementById('spouse-dob').focus();
+  recalcSoon();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const watch = ['dob', 'balance', 'returnPre', 'returnPost', 'spouse-dob'];
+  watch.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', recalcSoon);
+    el.addEventListener('change', recalcSoon);
+  });
+  document.getElementById('balance').addEventListener('blur', () => {
+    formatBalanceField();
+    recalcSoon();
+  });
+});
+</script>
+</body>
+</html>
