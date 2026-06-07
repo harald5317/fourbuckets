@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Mortgage Payoff Calculator — See When You're Debt-Free | Four Buckets</title>
+<meta name="description" content="Calculate exactly when your mortgage will be paid off and how much extra principal payments could save you in time and interest. Free, no email required.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://fourbuckets.app/mortgage-payoff-calculator/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Free Mortgage Payoff Calculator — See When You're Debt-Free">
+<meta property="og:description" content="Calculate exactly when your mortgage will be paid off and how much extra principal payments could save you. Free, no email required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fourbuckets.app/mortgage-payoff-calculator/">
+<meta property="og:site_name" content="Four Buckets">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/shared.css">
+<link rel="stylesheet" href="/css/tool-page.css">
+
+<!-- FAQ schema (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do extra principal payments save interest?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every dollar of extra principal you pay today is a dollar you no longer owe interest on for the entire remaining life of the loan. Because mortgage interest is charged on the outstanding balance each month, reducing the balance earlier means the interest portion of every future payment shrinks. On a 30-year, $300,000 mortgage at 6.5%, an extra $200 per month can shorten the term by roughly 6 years and save $80,000 or more in interest. The effect compounds the most in the early years of the loan, when the balance — and therefore the monthly interest charge — is highest."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I pay extra principal or invest the difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mathematically, the comparison is your mortgage rate (after the mortgage interest tax deduction, if you itemize) versus your expected after-tax investment return. If your mortgage rate is 7% and you can reasonably expect 5% after-tax from a diversified portfolio, paying down the mortgage wins. If your mortgage is 3.5% and you expect 7%+ from long-term equities, investing usually wins on expected value — but the mortgage payoff is a guaranteed return, while market returns are not. Many people split the difference: max retirement-account contributions first (for the tax advantage and employer match), then apply remaining cash to extra principal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does my mortgage have a prepayment penalty?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most U.S. residential mortgages originated after 2014 do not have prepayment penalties, thanks to Consumer Financial Protection Bureau (CFPB) Qualified Mortgage rules. However, some non-QM loans, older mortgages, and certain commercial loans still include them — typically as a percentage of the prepaid balance during the first 3 to 5 years. Always check your promissory note or call your servicer before making a large lump-sum prepayment. When you send extra money, also confirm with your servicer that it will be applied to principal (not to next month's payment or escrow)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is biweekly payment the same as extra monthly principal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A true biweekly payment plan splits your monthly payment in half and pays it every two weeks. Because there are 26 biweekly periods in a year, you end up making 13 monthly payments instead of 12 — one extra payment per year. The equivalent monthly approach is to add one-twelfth of your monthly payment as extra principal each month. The savings are similar, but the monthly DIY method gives you more control: you can pause or change the amount any month, and you avoid any setup fees some servicers charge for biweekly plans. Either approach beats the standard monthly schedule."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   Mortgage-payoff-calculator-specific styles.
+   Shared "calculator page" styles in /css/tool-page.css.
+   ============================================================ */
+
+/* Savings highlight callout (only shown when extra principal is set) */
+.savings-highlight {
+  background: linear-gradient(135deg, rgba(212,168,50,0.14) 0%, rgba(212,168,50,0.04) 100%);
+  border: 1px solid rgba(212,168,50,0.35);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.92);
+  line-height: 1.5;
+}
+.savings-highlight .label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  margin-bottom: 0.45rem;
+}
+.savings-highlight .gold-amount {
+  color: var(--gold2);
+  font-style: italic;
+}
+.savings-highlight .duration { color: var(--teal2); }
+
+/* Preset chips under the "extra principal" input */
+.preset-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+.preset-chips button {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.preset-chips button:hover {
+  background: rgba(212,168,50,0.1);
+  border-color: rgba(212,168,50,0.4);
+  color: var(--white);
+}
+.preset-chips button.active {
+  background: rgba(212,168,50,0.2);
+  border-color: rgba(212,168,50,0.55);
+  color: var(--gold2);
+}
+
+/* Implied APR mini-stat above the divider */
+.derived-stats {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.derived-stat {
+  display: flex;
+  flex-direction: column;
+}
+.derived-stat .stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 0.25rem;
+}
+.derived-stat .stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* Chart legend (only when comparing) */
+.chart-legend {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.chart-legend .swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+.chart-legend .swatch.baseline { background: var(--teal2); }
+.chart-legend .swatch.extra    { background: var(--gold2); }
+</style>
+<script data-goatcounter="https://fourbuckets.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<!-- Nav (mirrors landing page; "Free Tools" is the active section) -->
+<nav>
+  <a href="/" class="logo">Four<span>Buckets</span></a>
+  <div class="nav-links" style="display:flex;gap:1.5rem;align-items:center">
+    <a href="/#features">Features</a>
+    <a href="/#compare">vs. Others</a>
+    <a href="/tools/" aria-current="page">Free Tools</a>
+    <a href="/#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<main>
+
+<header class="page-header">
+  <span class="eyebrow">Free Tool · Updated for 2026</span>
+  <h1>Mortgage Payoff Calculator: See Your <em>Debt-Free Date</em></h1>
+  <div class="intro-text">
+    <p>A mortgage payoff calculator shows you exactly when your home loan will reach zero — and, if you make extra principal payments, how much you can save in time and total interest. This calculator uses three numbers you can read straight off your most recent mortgage statement: the remaining balance, the principal portion of your monthly payment, and the interest portion. From those, it derives your effective interest rate and runs a month-by-month amortization until the loan is paid off.</p>
+    <p>Add an optional extra principal payment, and the calculator runs a second projection alongside the original schedule, so you can see both payoff dates and the difference in total interest paid. Even modest extra payments — $100 or $250 a month — can knock years off a 30-year mortgage. The reason is compounding in reverse: every extra dollar applied to principal today is a dollar you don't pay interest on for the remaining life of the loan. All math runs in your browser. Nothing is sent anywhere.</p>
+  </div>
+</header>
+
+<!-- Calculator -->
+<section class="calculator">
+  <form class="calc-form" id="mortgage-form" onsubmit="event.preventDefault()">
+    <h2>From your last statement</h2>
+    <div class="form-grid">
+
+      <div class="input-group full">
+        <label for="balance">Remaining balance</label>
+        <div class="with-prefix">
+          <span class="prefix">$</span>
+          <input type="text" id="balance" inputmode="numeric" placeholder="300,000" autocomplete="off">
+        </div>
+        <div class="field-error" id="err-balance"></div>
+      </div>
+
+      <div class="input-group">
+        <label for="principal">Monthly principal</label>
+        <div class="with-prefix">
+          <span class="prefix">$</span>
+          <input type="text" id="principal" inputmode="numeric" placeholder="450" autocomplete="off">
+        </div>
+        <div class="help">Principal portion of one month's P&amp;I payment.</div>
+        <div class="field-error" id="err-principal"></div>
+      </div>
+
+      <div class="input-group">
+        <label for="interest">Monthly interest</label>
+        <div class="with-prefix">
+          <span class="prefix">$</span>
+          <input type="text" id="interest" inputmode="numeric" placeholder="1,625" autocomplete="off">
+        </div>
+        <div class="help">Interest portion of the same payment.</div>
+        <div class="field-error" id="err-interest"></div>
+      </div>
+
+      <div class="input-group full">
+        <label for="extra">Extra principal each month <span style="color:rgba(255,255,255,0.4);font-weight:400">(optional)</span></label>
+        <div class="with-prefix">
+          <span class="prefix">$</span>
+          <input type="text" id="extra" inputmode="numeric" placeholder="0" autocomplete="off">
+        </div>
+        <div class="preset-chips" id="preset-chips">
+          <button type="button" data-extra="0">$0</button>
+          <button type="button" data-extra="100">+$100</button>
+          <button type="button" data-extra="250">+$250</button>
+          <button type="button" data-extra="500">+$500</button>
+          <button type="button" data-extra="1000">+$1,000</button>
+        </div>
+        <div class="field-error" id="err-extra"></div>
+      </div>
+
+    </div>
+  </form>
+
+  <aside class="result-card" aria-live="polite">
+    <span class="result-status">Your projection</span>
+    <div id="headline-block"><p class="result-empty">Enter your balance and the principal/interest split from your last statement to see your payoff projection.</p></div>
+    <div class="result-meta" id="result-meta"></div>
+  </aside>
+</section>
+
+<!-- Detail (chart + table) -->
+<section class="results-detail hidden" id="results-detail">
+  <div class="chart-wrap">
+    <h3>Remaining balance over time</h3>
+    <div class="chart-legend" id="chart-legend"></div>
+    <div class="chart-container"><canvas id="balance-chart"></canvas></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-wrap-header">
+      <h3>Month-by-month amortization</h3>
+      <div class="table-toggle" role="tablist" aria-label="Table density">
+        <button type="button" id="view-all"   class="active" onclick="setTableView('all')"     role="tab" aria-selected="true">All months</button>
+        <button type="button" id="view-years"             onclick="setTableView('years')" role="tab" aria-selected="false">Year-end only</button>
+      </div>
+    </div>
+    <div class="table-scroll tall">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Payment</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th id="th-extra" style="display:none">Extra</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="results-tbody"></tbody>
+      </table>
+    </div>
+    <div class="table-footnote" id="table-footnote"></div>
+  </div>
+</section>
+
+<!-- Waitlist CTA -->
+<aside class="waitlist-cta-box">
+  <h3>Want to see this as part of your full retirement plan?</h3>
+  <p>Four Buckets is a complete retirement planner that connects your mortgage payoff, RMDs, Social Security, and other accounts into one projection. Currently in beta.</p>
+  <a href="/#waitlist">Join the waitlist →</a>
+</aside>
+
+<!-- FAQ -->
+<section class="faq-section faq">
+  <h2>Frequently asked questions</h2>
+
+  <details>
+    <summary>How do extra principal payments save interest?</summary>
+    <div>
+      <p>Every dollar of extra principal you pay today is a dollar you no longer owe interest on for the entire remaining life of the loan. Mortgage interest is charged each month on the outstanding balance, so reducing the balance earlier means the interest portion of every future payment shrinks.</p>
+      <p>On a 30-year, $300,000 mortgage at 6.5%, an extra <strong>$200/month</strong> can shorten the term by roughly <strong>6 years</strong> and save <strong>$80,000+</strong> in interest. The effect compounds most in the early years, when the balance — and therefore each month's interest charge — is highest. By year 25, an extra payment has much less impact, simply because the remaining balance is small.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Should I pay extra principal or invest the difference?</summary>
+    <div>
+      <p>Mathematically, it's a comparison between your mortgage rate (after the mortgage-interest tax deduction, if you itemize) and your expected <em>after-tax</em> investment return.</p>
+      <p>If your mortgage rate is 7% and you can reasonably expect 5% after-tax from a diversified portfolio, paying down the mortgage wins. If your mortgage is 3.5% and you expect 7%+ from long-term equities, investing usually wins on expected value — but the mortgage payoff is a <strong>guaranteed</strong> return, while market returns are not.</p>
+      <p>Many people split the difference: max retirement-account contributions first (for the tax advantage and any employer match), then apply remaining cash to extra principal. The psychological benefit of being mortgage-free in retirement also matters for many households, even when the spreadsheet says "invest instead."</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Does my mortgage have a prepayment penalty?</summary>
+    <div>
+      <p>Most U.S. residential mortgages originated after 2014 do <em>not</em> have prepayment penalties, thanks to Consumer Financial Protection Bureau (CFPB) Qualified Mortgage rules.</p>
+      <p>However, some non-QM loans, older mortgages, and certain commercial loans still include them — typically as a percentage of the prepaid balance during the first 3 to 5 years. Always check your promissory note or call your servicer before making a large lump-sum prepayment.</p>
+      <p>When you send extra money, also <strong>confirm with your servicer how it will be applied</strong>. Some servicers default to applying extra funds to the next month's payment (which doesn't save interest) instead of to principal. A note in the memo line like "apply to principal only" usually works, but confirm in writing.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Is biweekly payment the same as extra monthly principal?</summary>
+    <div>
+      <p>A true biweekly payment plan splits your monthly payment in half and pays it every two weeks. Because there are 26 biweekly periods in a year, you end up making the equivalent of <strong>13 monthly payments instead of 12</strong> — one extra payment per year.</p>
+      <p>The equivalent monthly approach is to add one-twelfth of your monthly payment as extra principal each month. The interest savings are similar, but the monthly DIY method gives you more control: you can pause or change the amount any month, and you avoid any setup fees some servicers charge for biweekly plans.</p>
+      <p>Either approach beats the standard monthly schedule. To model biweekly in this calculator, enter (monthly payment ÷ 12) as your "extra principal each month".</p>
+    </div>
+  </details>
+</section>
+
+<p class="disclaimer">
+  This calculator is provided for educational purposes only and does not constitute tax, legal, or financial advice. Projections assume a constant interest rate (derived from the principal/interest split you enter) and consistent monthly payments; actual mortgage behavior may vary due to rate adjustments (ARMs), escrow changes, additional fees, or payment-application policies set by your servicer. Always verify with your loan documents and servicer before making payoff decisions.
+</p>
+
+</main>
+
+<footer>
+  <a href="/" class="logo" style="font-size:1.1rem">Four<span>Buckets</span></a>
+  <div>© 2026 Four Buckets · <a href="mailto:hello@fourbuckets.app">hello@fourbuckets.app</a></div>
+</footer>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+
+<script>
+// ============================================================
+// Mortgage payoff calculator logic
+// ============================================================
+const MAX_MONTHS = 60 * 12;  // 60-year cap, safety against pathological inputs
+
+const fmtUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const fmtUSDcents = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtNum = new Intl.NumberFormat('en-US');
+const fmtPct = (x) => `${(x * 100).toFixed(2)}%`;
+
+const MONTH_NAMES_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTH_NAMES_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function parseMoney(s) {
+  if (s === null || s === undefined) return NaN;
+  const cleaned = String(s).replace(/[\s,$_]/g, '');
+  if (cleaned === '') return NaN;
+  return Number(cleaned);
+}
+function formatMoneyField(elId) {
+  const el = document.getElementById(elId);
+  const n = parseMoney(el.value);
+  if (Number.isFinite(n) && n >= 0) el.value = fmtNum.format(Math.round(n));
+}
+
+function startDate() {
+  // Month 1's payment date = first of next month (relative to today)
+  const d = new Date();
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1));
+}
+function addMonths(d, n) {
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, 1));
+}
+function fmtMonthShort(d) { return `${MONTH_NAMES_SHORT[d.getUTCMonth()]} ${d.getUTCFullYear()}`; }
+function fmtMonthLong(d)  { return `${MONTH_NAMES_LONG[d.getUTCMonth()]} ${d.getUTCFullYear()}`; }
+
+function fmtDuration(months) {
+  if (months <= 0) return '0 months';
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  if (y === 0) return `${m} month${m === 1 ? '' : 's'}`;
+  if (m === 0) return `${y} year${y === 1 ? '' : 's'}`;
+  return `${y} year${y === 1 ? '' : 's'} ${m} month${m === 1 ? '' : 's'}`;
+}
+
+// ============================================================
+// Amortization
+// ============================================================
+function amortize({ balance, monthlyRate, basePayment, extra }) {
+  const rows = [];
+  let bal = balance;
+  let totalInterest = 0;
+  const sd = startDate();
+  let month = 0;
+  while (bal > 0.005 && month < MAX_MONTHS) {
+    month++;
+    const interest = bal * monthlyRate;
+    let scheduledPrincipal = basePayment - interest;
+    // Don't let scheduled principal go negative if rate spike or weird inputs
+    if (scheduledPrincipal < 0) scheduledPrincipal = 0;
+    let extraPayment = extra;
+    // Cap principal so we don't overpay
+    if (scheduledPrincipal + extraPayment >= bal) {
+      // Final payment
+      const principalThisMonth = bal;
+      const extraApplied = Math.max(0, principalThisMonth - scheduledPrincipal);
+      const scheduledApplied = principalThisMonth - extraApplied;
+      const payment = interest + principalThisMonth;
+      totalInterest += interest;
+      rows.push({
+        month,
+        date: addMonths(sd, month - 1),
+        payment,
+        principal: scheduledApplied,
+        interest,
+        extra: extraApplied,
+        balance: 0
+      });
+      bal = 0;
+      break;
+    }
+    bal -= scheduledPrincipal + extraPayment;
+    totalInterest += interest;
+    rows.push({
+      month,
+      date: addMonths(sd, month - 1),
+      payment: basePayment + extraPayment,
+      principal: scheduledPrincipal,
+      interest,
+      extra: extraPayment,
+      balance: bal
+    });
+  }
+  return { rows, totalInterest, monthsToPayoff: rows.length, finalBalance: bal };
+}
+
+// ============================================================
+// State + UI
+// ============================================================
+let currentResult = null;
+let tableView = 'all'; // 'all' or 'years'
+
+function readInputs() {
+  const errors = {};
+  const balance = parseMoney(document.getElementById('balance').value);
+  const principal = parseMoney(document.getElementById('principal').value);
+  const interest = parseMoney(document.getElementById('interest').value);
+  const extra = parseMoney(document.getElementById('extra').value);
+
+  const bRaw = document.getElementById('balance').value.trim();
+  const pRaw = document.getElementById('principal').value.trim();
+  const iRaw = document.getElementById('interest').value.trim();
+  const xRaw = document.getElementById('extra').value.trim();
+
+  if (bRaw === '') errors.balance = '';
+  else if (!Number.isFinite(balance) || balance <= 0) errors.balance = 'Enter a valid balance.';
+  else if (balance > 1e8) errors.balance = 'Balance looks too large.';
+
+  if (pRaw === '') errors.principal = '';
+  else if (!Number.isFinite(principal) || principal < 0) errors.principal = 'Enter a valid amount.';
+  else if (principal === 0 && Number.isFinite(interest) && interest > 0)
+    errors.principal = "Must be greater than 0 — your payment wouldn't cover the interest.";
+
+  if (iRaw === '') errors.interest = '';
+  else if (!Number.isFinite(interest) || interest < 0) errors.interest = 'Enter a valid amount.';
+
+  let extraVal = 0;
+  if (xRaw !== '') {
+    if (!Number.isFinite(extra) || extra < 0) errors.extra = 'Enter a valid amount.';
+    else extraVal = extra;
+  }
+
+  const ready = Number.isFinite(balance) && balance > 0 &&
+                Number.isFinite(principal) && principal > 0 &&
+                Number.isFinite(interest) && interest >= 0 &&
+                !errors.balance && !errors.principal && !errors.interest && !errors.extra;
+
+  return {
+    errors,
+    ready,
+    inputs: { balance, principal, interest, extra: extraVal }
+  };
+}
+
+function paintErrors(errors) {
+  for (const [key, fId, eId] of [
+    ['balance',   'balance',   'err-balance'],
+    ['principal', 'principal', 'err-principal'],
+    ['interest',  'interest',  'err-interest'],
+    ['extra',     'extra',     'err-extra']
+  ]) {
+    const msg = errors[key];
+    const el = document.getElementById(fId);
+    const er = document.getElementById(eId);
+    if (msg) { el.classList.add('error'); er.textContent = msg; }
+    else     { el.classList.remove('error'); er.textContent = ''; }
+  }
+}
+
+function clearResult(message) {
+  document.getElementById('headline-block').innerHTML =
+    `<p class="result-empty">${message || 'Enter your balance and the principal/interest split from your last statement to see your payoff projection.'}</p>`;
+  document.getElementById('result-meta').innerHTML = '';
+  document.getElementById('results-detail').classList.add('hidden');
+  destroyChart();
+  currentResult = null;
+}
+
+function computeProjection(inputs) {
+  const { balance, principal, interest, extra } = inputs;
+  const monthlyRate = balance > 0 ? interest / balance : 0;
+  const apr = monthlyRate * 12;
+  const basePayment = principal + interest;
+
+  // Hard error: payment doesn't cover interest → loan never amortizes
+  if (basePayment <= interest && interest > 0) {
+    return { error: "Your monthly payment doesn't cover the interest. Check your inputs — the principal portion should be greater than zero." };
+  }
+
+  const baseline = amortize({ balance, monthlyRate, basePayment, extra: 0 });
+  if (baseline.rows.length >= MAX_MONTHS && baseline.finalBalance > 0.01) {
+    return { error: "These numbers don't pay down the principal within 60 years. Double-check your inputs." };
+  }
+
+  let withExtra = null;
+  if (extra > 0) {
+    withExtra = amortize({ balance, monthlyRate, basePayment, extra });
+  }
+
+  return { monthlyRate, apr, basePayment, baseline, withExtra };
+}
+
+function renderResult(result, inputs) {
+  const { apr, basePayment, baseline, withExtra } = result;
+  const block = document.getElementById('headline-block');
+  const meta  = document.getElementById('result-meta');
+
+  // Headline (baseline)
+  const baselinePayoff = baseline.rows[baseline.rows.length - 1].date;
+  const baseLines = [];
+  baseLines.push(`
+    <div class="derived-stats">
+      <div class="derived-stat">
+        <span class="stat-label">Implied APR</span>
+        <span class="stat-value">${fmtPct(apr)}</span>
+      </div>
+      <div class="derived-stat">
+        <span class="stat-label">Total P&amp;I payment</span>
+        <span class="stat-value">${fmtUSD.format(Math.round(basePayment))}/mo</span>
+      </div>
+    </div>
+  `);
+  baseLines.push(`
+    <div class="result-headline">
+      Mortgage paid off in <span class="duration">${fmtDuration(baseline.monthsToPayoff)}</span>
+      (<span class="date">${fmtMonthLong(baselinePayoff)}</span>).
+    </div>
+    <div class="result-headline" style="font-size:0.95rem;font-weight:500;color:rgba(255,255,255,0.75)">
+      Total interest paid: <span class="amount">${fmtUSD.format(Math.round(baseline.totalInterest))}</span>
+    </div>
+  `);
+
+  // Savings highlight (with extra)
+  if (withExtra) {
+    const monthsSaved = baseline.monthsToPayoff - withExtra.monthsToPayoff;
+    const interestSaved = baseline.totalInterest - withExtra.totalInterest;
+    const xPayoff = withExtra.rows[withExtra.rows.length - 1].date;
+    baseLines.push(`
+      <div class="savings-highlight">
+        <span class="label">With $${fmtNum.format(Math.round(inputs.extra))}/mo extra</span>
+        Paid off in <span class="duration">${fmtDuration(withExtra.monthsToPayoff)}</span>
+        (<span class="duration">${fmtMonthLong(xPayoff)}</span>) —
+        saves <span class="duration">${fmtDuration(monthsSaved)}</span>
+        and <span class="gold-amount">${fmtUSD.format(Math.round(interestSaved))}</span> in interest.
+      </div>
+    `);
+  }
+  block.innerHTML = baseLines.join('');
+
+  // Notes
+  const notes = [];
+  if (apr > 0.25) {
+    notes.push({ cls: 'warn', html: `<strong>Unusually high rate.</strong> Your implied APR is ${fmtPct(apr)} — double-check the interest and balance you entered.` });
+  } else if (apr > 0 && apr < 0.005) {
+    notes.push({ cls: 'warn', html: `<strong>Unusually low rate.</strong> Your implied APR is ${fmtPct(apr)} — double-check the interest and balance you entered.` });
+  }
+  if (withExtra) {
+    notes.push({ cls: 'gold', html: `Make sure your servicer applies extra payments to <strong>principal</strong>, not to next month's payment or escrow. A memo line like "apply to principal only" helps.` });
+  }
+  meta.innerHTML = notes.map(n => `<div class="result-note ${n.cls}">${n.html}</div>`).join('');
+
+  // Detail (chart + table)
+  document.getElementById('results-detail').classList.remove('hidden');
+  renderChart(result, inputs);
+  renderTable(result, inputs);
+}
+
+// ─── Table ────────────────────────────────────────────────────
+function setTableView(view) {
+  tableView = view;
+  document.getElementById('view-all').classList.toggle('active',   view === 'all');
+  document.getElementById('view-years').classList.toggle('active', view === 'years');
+  document.getElementById('view-all').setAttribute('aria-selected',   view === 'all');
+  document.getElementById('view-years').setAttribute('aria-selected', view === 'years');
+  if (currentResult) renderTable(currentResult, currentResult._inputs);
+}
+
+function renderTable(result, inputs) {
+  currentResult = result;
+  result._inputs = inputs;
+  const { withExtra, baseline } = result;
+  // Use with-extra schedule if active, else baseline
+  const schedule = withExtra || baseline;
+  const hasExtra = !!withExtra;
+
+  document.getElementById('th-extra').style.display = hasExtra ? '' : 'none';
+
+  let rows = schedule.rows;
+  if (tableView === 'years') {
+    // Keep last row of each calendar year + the final payoff row
+    const yearGroups = new Map();
+    for (const r of rows) yearGroups.set(r.date.getUTCFullYear(), r);
+    rows = [...yearGroups.values()];
+    // Ensure final payoff row is present (in case it shares year w/ last group entry, it already is)
+  }
+
+  const tbody = document.getElementById('results-tbody');
+  tbody.innerHTML = rows.map(r => {
+    const yearEnd = (r.date.getUTCMonth() === 11);
+    const cls = (tableView === 'all' && yearEnd) ? 'year-end' : '';
+    const extraCell = hasExtra ? `<td>${fmtUSD.format(Math.round(r.extra || 0))}</td>` : '';
+    return `<tr class="${cls}">
+      <td>${r.month}</td>
+      <td>${fmtMonthShort(r.date)}</td>
+      <td>${fmtUSD.format(Math.round(r.payment))}</td>
+      <td>${fmtUSD.format(Math.round(r.principal))}</td>
+      <td>${fmtUSD.format(Math.round(r.interest))}</td>
+      ${extraCell}
+      <td>${fmtUSD.format(Math.round(r.balance))}</td>
+    </tr>`;
+  }).join('');
+
+  const which = hasExtra ? 'with extra principal' : 'baseline';
+  document.getElementById('table-footnote').innerHTML =
+    `Showing the ${which} schedule. Interest each month is computed on the prior month's remaining balance ` +
+    `at the implied monthly rate (annual rate ÷ 12). The final payment is adjusted so the balance lands exactly on zero.`;
+}
+
+// ─── Chart ────────────────────────────────────────────────────
+let chartInstance = null;
+function destroyChart() { if (chartInstance) { chartInstance.destroy(); chartInstance = null; } }
+
+function renderChart(result, inputs) {
+  if (typeof Chart === 'undefined') {
+    window.addEventListener('load', () => renderChart(result, inputs), { once: true });
+    return;
+  }
+  destroyChart();
+  const { baseline, withExtra } = result;
+
+  // Build aligned label series — use the longer schedule's month sequence
+  const longerRows = baseline.rows;
+  const labels = ['Month 0', ...longerRows.map(r => fmtMonthShort(r.date))];
+
+  // Baseline series (length = longerRows.length + 1, starting at month 0)
+  const baselineSeries = [inputs.balance, ...baseline.rows.map(r => r.balance)];
+
+  // With-extra series: pad with zeros after payoff so the line ends visibly at 0
+  let withExtraSeries = null;
+  if (withExtra) {
+    withExtraSeries = [inputs.balance, ...withExtra.rows.map(r => r.balance)];
+    while (withExtraSeries.length < baselineSeries.length) withExtraSeries.push(0);
+  }
+
+  const datasets = [{
+    label: 'Baseline',
+    data: baselineSeries,
+    borderColor: 'rgba(20, 184, 166, 1)',
+    backgroundColor: 'rgba(13, 148, 136, 0.15)',
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    borderWidth: 2,
+    tension: 0.15,
+    fill: !withExtra
+  }];
+  if (withExtraSeries) {
+    datasets.push({
+      label: `With $${fmtNum.format(Math.round(inputs.extra))}/mo extra`,
+      data: withExtraSeries,
+      borderColor: 'rgba(240, 192, 64, 1)',
+      backgroundColor: 'rgba(212, 168, 50, 0.12)',
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      borderWidth: 2,
+      tension: 0.15,
+      fill: true
+    });
+  }
+
+  // Update legend
+  const legend = document.getElementById('chart-legend');
+  if (withExtra) {
+    legend.innerHTML =
+      '<span><span class="swatch baseline"></span>Current schedule</span>' +
+      `<span><span class="swatch extra"></span>With $${fmtNum.format(Math.round(inputs.extra))}/mo extra</span>`;
+  } else {
+    legend.innerHTML = '';
+  }
+
+  const ctx = document.getElementById('balance-chart').getContext('2d');
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(13,27,42,0.95)',
+          titleColor: '#f0c040',
+          bodyColor: '#fff',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            label: (item) => `${item.dataset.label}: ${fmtUSD.format(item.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: 'rgba(255,255,255,0.55)', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: 'rgba(255,255,255,0.55)',
+            callback: (v) => '$' + fmtNum.format(v)
+          },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Wire-up
+// ============================================================
+let debounceTimer = null;
+function recalcSoon() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(recalcNow, 250);
+}
+function recalcNow() {
+  const r = readInputs();
+  paintErrors(r.errors);
+  if (!r.ready) {
+    clearResult();
+    return;
+  }
+  const result = computeProjection(r.inputs);
+  if (result.error) {
+    clearResult(result.error);
+    return;
+  }
+  renderResult(result, r.inputs);
+}
+
+function highlightPreset(value) {
+  document.querySelectorAll('#preset-chips button').forEach(btn => {
+    btn.classList.toggle('active', Number(btn.dataset.extra) === value);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const watch = ['balance', 'principal', 'interest', 'extra'];
+  watch.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      if (id === 'extra') {
+        const v = parseMoney(el.value);
+        highlightPreset(Number.isFinite(v) ? v : -1);
+      }
+      recalcSoon();
+    });
+    el.addEventListener('blur', () => {
+      formatMoneyField(id);
+      recalcSoon();
+    });
+  });
+
+  // Preset chips
+  document.querySelectorAll('#preset-chips button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = Number(btn.dataset.extra);
+      document.getElementById('extra').value = v === 0 ? '' : fmtNum.format(v);
+      highlightPreset(v);
+      recalcSoon();
+    });
+  });
+
+  highlightPreset(0); // start with $0 selected
+});
+</script>
+</body>
+</html>
