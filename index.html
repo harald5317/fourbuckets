@@ -394,6 +394,30 @@ h1 em {
   line-height: 1.7;
 }
 
+/* ── Spending phases ── */
+.phase-range {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  background: rgba(212,168,50,0.1);
+  border: 1px solid rgba(212,168,50,0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+.phases-note {
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 620px;
+  margin: 2.5rem auto 0;
+}
+.phases-note strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
 /* ── vs Competitors ── */
 .compare {
   padding: 5rem 1.5rem;
@@ -776,6 +800,36 @@ h1 em {
   </div>
 </section>
 
+<!-- Spending Phases -->
+<section class="features" id="phases">
+  <div class="section-label">How real retirees spend</div>
+  <h2 class="section-title">Your spending won't be a <em>flat line</em></h2>
+  <p class="section-sub">Most planners stretch one spending number across 30 years. In reality, retirement moves through three phases — and Four Buckets models each one.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">✈️</div>
+      <span class="phase-range">Go-Go · ~62–74</span>
+      <h3>Go-Go Years</h3>
+      <p>The active early years: travel, hobbies, helping the kids, the things you retired for. Discretionary spending is at its highest — and your plan should expect it, not pretend you'll live lean from day one.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <span class="phase-range">Slow-Go · ~75–84</span>
+      <h3>Slow-Go Years</h3>
+      <p>The pace eases. Less long-haul travel, more time close to home. Spending typically settles 20–30% below the Go-Go years — which can meaningfully extend how long your portfolio lasts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏡</div>
+      <span class="phase-range">No-Go · 85+</span>
+      <h3>No-Go Years</h3>
+      <p>Activity slows further, but healthcare and potential long-term-care costs can rise. Four Buckets lets you taper discretionary spending while flagging a separate medical bump for these years.</p>
+    </div>
+  </div>
+
+  <p class="phases-note">Set a <strong>separate annual spending level for each phase</strong> — and watch how the curve, not a single flat number, changes whether your money lasts. Every phase boundary and amount is yours to edit.</p>
+</section>
+
 <!-- Comparison -->
 <section class="compare" id="compare">
   <div class="section-label">Honest comparison</div>
@@ -808,6 +862,13 @@ h1 em {
       </tr>
       <tr>
         <td>SECURE 2.0 (age 75 for 1960+)</td>
+        <td class="highlight"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="partial">Partial</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>Go-Go / Slow-Go / No-Go spending phases</td>
         <td class="highlight"><span class="check">✓</span></td>
         <td><span class="cross">—</span></td>
         <td><span class="partial">Partial</span></td>
