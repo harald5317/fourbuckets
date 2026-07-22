@@ -2,33 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="msvalidate.01" content="DE7DCAB389AF2C1CAE04F841C9C9D28F" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Four Buckets — Retirement Projection Planner</title>
-<meta name="description" content="A transparent, powerful retirement planning tool that shows exactly how your money grows, when RMDs kick in, and whether your portfolio will last. Join the early access waitlist.">
-<meta property="og:title" content="Four Buckets — Retirement Projection Planner">
-<meta property="og:description" content="No black boxes. No advisor upsells. Just clear, honest retirement math — tracked across all four buckets. Join the waitlist.">
+<title>Four Buckets Studio — Spreadsheets &amp; Printables for FIRE, Retirement &amp; Caregiving</title>
+<meta name="description" content="Carefully built Excel and Google Sheets tools for financial independence, caregiving, and doctor visits — plus free retirement calculators. No subscriptions.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://fourbuckets.app/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Four Buckets Studio — Spreadsheets & Printables for FIRE, Retirement & Caregiving">
+<meta property="og:description" content="Carefully built Excel and Google Sheets tools for financial independence, caregiving, and doctor visits — plus free retirement calculators. No subscriptions.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://fourbuckets.app/">
+<meta property="og:site_name" content="Four Buckets">
+
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/shared.css">
 <style>
-/* ── Hero Section ── */
+main { position: relative; z-index: 1; }
+
+/* ── Hero ── */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 88vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 7rem 1.5rem 5rem;
+  padding: 8rem 1.5rem 4rem;
   overflow: hidden;
 }
 
-/* Radial gradient background */
 .hero::after {
   content: '';
   position: absolute;
@@ -79,7 +86,7 @@
 
 h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-size: clamp(2.6rem, 6vw, 5rem);
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -87,238 +94,64 @@ h1 {
   margin: 0 auto 1.5rem;
   animation: fadeUp 0.6s 0.1s ease both;
 }
-
-h1 em {
-  font-style: italic;
-  color: var(--teal2);
-}
+h1 em { font-style: italic; color: var(--teal2); }
 
 .hero-sub {
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 300;
   color: rgba(255,255,255,0.65);
-  max-width: 600px;
-  margin: 0 auto 3rem;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
   line-height: 1.7;
   animation: fadeUp 0.6s 0.2s ease both;
 }
 
-/* ── Signup Form ── */
-.signup-form {
+/* ── Buttons ── */
+.hero-actions {
   display: flex;
-  gap: 0.75rem;
-  max-width: 480px;
-  width: 100%;
-  margin: 0 auto 1rem;
+  gap: 0.9rem;
+  justify-content: center;
+  flex-wrap: wrap;
   animation: fadeUp 0.6s 0.3s ease both;
 }
 
-.signup-form input {
-  flex: 1;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
+.btn {
+  display: inline-block;
+  padding: 0.9rem 1.75rem;
   border-radius: 8px;
-  padding: 0.875rem 1.25rem;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-}
-.signup-form input::placeholder { color: rgba(255,255,255,0.35); }
-.signup-form input:focus {
-  border-color: var(--teal);
-  background: rgba(255,255,255,0.10);
-}
-
-.signup-form button {
-  background: var(--gold);
-  color: var(--navy);
-  border: none;
-  border-radius: 8px;
-  padding: 0.875rem 1.75rem;
   font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s, color 0.2s;
   white-space: nowrap;
-  transition: background 0.2s, transform 0.15s;
 }
-.signup-form button:hover { background: var(--gold2); transform: translateY(-1px); }
-.signup-form button:active { transform: translateY(0); }
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
 
-.form-note {
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.22);
+}
+.btn-secondary:hover {
+  border-color: var(--teal2);
+  color: var(--teal2);
+  transform: translateY(-1px);
+}
+
+.hero-note {
   font-size: 0.8rem;
   color: rgba(255,255,255,0.35);
+  margin-top: 1.5rem;
   animation: fadeUp 0.6s 0.35s ease both;
 }
 
-.success-msg {
-  display: none;
-  background: rgba(13,148,136,0.15);
-  border: 1px solid rgba(13,148,136,0.4);
-  color: var(--teal2);
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-/* ── Social proof ── */
-.social-proof {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2.5rem;
-  animation: fadeUp 0.6s 0.4s ease both;
-}
-
-.avatars {
-  display: flex;
-}
-.avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--navy);
-  margin-left: -8px;
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  color: var(--navy);
-}
-.avatar:first-child { margin-left: 0; }
-
-.social-proof p {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.5);
-}
-.social-proof strong { color: var(--white); }
-
-/* ── App Preview ── */
-.preview-section {
-  position: relative;
-  padding: 0 1.5rem 6rem;
-  text-align: center;
-}
-
-.preview-label {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 2rem;
-}
-
-.preview-frame {
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.browser-chrome {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px 14px 0 0;
-  padding: 0.75rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.browser-dots {
-  display: flex;
-  gap: 5px;
-}
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot-r { background: #ef4444; }
-.dot-y { background: #f59e0b; }
-.dot-g { background: #22c55e; }
-
-.browser-url {
-  flex: 1;
-  background: rgba(255,255,255,0.06);
-  border-radius: 6px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.3);
-  margin: 0 0.5rem;
-  text-align: left;
-}
-
-/* ── Dashboard mockup ── */
-.app-preview {
-  background: #0f1f3d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-top: none;
-  border-radius: 0 0 14px 14px;
-  padding: 1.5rem;
-  text-align: left;
-  overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-}
-
-.dash-header {
-  background: linear-gradient(135deg, #0f1f3d 0%, #1a3a6e 100%);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  border-left: 4px solid var(--gold);
-  margin-bottom: 1rem;
-}
-.dash-header h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: var(--white);
-  margin-bottom: 0.2rem;
-}
-.dash-header p { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
-
-.kpi-row {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-
-.kpi-card {
-  background: white;
-  border-radius: 8px;
-  padding: 0.7rem 0.75rem;
-  border-top: 3px solid var(--teal);
-}
-.kpi-card.gold { border-color: var(--gold); }
-.kpi-card.red  { border-color: #ef4444; }
-.kpi-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; font-weight: 600; margin-bottom: 0.3rem; }
-.kpi-value { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: #0f1f3d; line-height: 1; }
-.kpi-sub   { font-size: 0.5rem; color: #94a3b8; margin-top: 0.25rem; }
-
-.chart-row {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 0.6rem;
-  margin-bottom: 0.6rem;
-}
-
-.chart-box {
-  background: white;
-  border-radius: 8px;
-  padding: 0.75rem;
-  height: 130px;
-  overflow: hidden;
-  position: relative;
-}
-.chart-title { font-size: 0.6rem; font-weight: 600; color: #0f1f3d; margin-bottom: 0.4rem; }
-
-/* SVG mini charts */
-.chart-svg { width: 100%; height: 90px; }
-
-/* ── Features ── */
-.features {
+/* ── Section scaffolding ── */
+.section {
   padding: 5rem 1.5rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -342,16 +175,127 @@ h1 em {
   margin-bottom: 1rem;
   line-height: 1.15;
 }
+.section-title em { font-style: italic; color: var(--gold2); }
 
 .section-sub {
   text-align: center;
   color: rgba(255,255,255,0.5);
   font-size: 1.05rem;
-  max-width: 560px;
-  margin: 0 auto 4rem;
+  max-width: 600px;
+  margin: 0 auto 3.5rem;
   line-height: 1.7;
 }
 
+/* ── Product cards ── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.product-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(13,148,136,0.32);
+  transform: translateY(-3px);
+}
+
+.product-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--cream);
+  overflow: hidden;
+}
+.product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-status {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: rgba(13,27,42,0.88);
+  border: 1px solid rgba(212,168,50,0.45);
+  color: var(--gold2);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+
+.product-body {
+  padding: 1.6rem 1.75rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.product-tagline {
+  font-size: 0.85rem;
+  color: var(--teal2);
+  margin-bottom: 0.9rem;
+}
+
+.product-card p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.product-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.product-badges span {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+}
+
+.product-cta {
+  margin-top: auto;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gold2);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.product-cta::after {
+  content: ' →';
+  display: inline-block;
+  transition: transform 0.15s;
+}
+.product-card:hover .product-cta::after { transform: translateX(3px); }
+
+/* ── Spending phases ── */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -394,7 +338,6 @@ h1 em {
   line-height: 1.7;
 }
 
-/* ── Spending phases ── */
 .phase-range {
   display: inline-block;
   font-size: 0.68rem;
@@ -413,66 +356,69 @@ h1 em {
   color: rgba(255,255,255,0.5);
   font-size: 0.95rem;
   line-height: 1.7;
-  max-width: 620px;
+  max-width: 640px;
   margin: 2.5rem auto 0;
 }
 .phases-note strong { color: rgba(255,255,255,0.8); font-weight: 500; }
 
-/* ── vs Competitors ── */
-.compare {
-  padding: 5rem 1.5rem;
-  max-width: 860px;
-  margin: 0 auto;
+/* ── Free tools ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
 }
 
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.tool-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(13,148,136,0.35);
+  transform: translateY(-3px);
+}
+.tool-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.tool-card .tagline {
+  font-size: 0.82rem;
+  color: var(--teal2);
+  margin-bottom: 0.85rem;
+}
+.tool-card p {
   font-size: 0.9rem;
-  margin-top: 3rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.65;
+  margin-bottom: 1.4rem;
+  flex: 1;
 }
-
-.compare-table th {
-  padding: 1rem 1.25rem;
-  text-align: center;
-  font-weight: 600;
-  border-bottom: 2px solid rgba(255,255,255,0.08);
-}
-.compare-table th:first-child { text-align: left; }
-.compare-table th.highlight {
-  color: var(--teal2);
-  background: rgba(13,148,136,0.08);
-  border-radius: 8px 8px 0 0;
-}
-
-.compare-table td {
-  padding: 0.9rem 1.25rem;
-  text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.7);
-}
-.compare-table td:first-child {
-  text-align: left;
+.tool-card .cta {
+  font-size: 0.88rem;
+  color: var(--gold2);
   font-weight: 500;
-  color: var(--white);
 }
-.compare-table td.highlight {
-  background: rgba(13,148,136,0.06);
-  color: var(--teal2);
-  font-weight: 600;
+.tool-card .cta::after {
+  content: ' →';
+  display: inline-block;
+  transition: transform 0.15s;
 }
-.compare-table tr:last-child td { border-bottom: none; }
+.tool-card:hover .cta::after { transform: translateX(3px); }
 
-.check { color: var(--teal2); font-size: 1.1rem; }
-.cross { color: rgba(255,255,255,0.25); font-size: 1.1rem; }
-.partial { color: var(--gold); font-size: 0.8rem; }
-
-/* ── Testimonial / Quote ── */
-.testimonial {
+/* ── About / founder note ── */
+.about {
   padding: 4rem 1.5rem;
   text-align: center;
 }
-
 .quote-block {
   max-width: 680px;
   margin: 0 auto;
@@ -482,16 +428,14 @@ h1 em {
   border-radius: 14px;
   padding: 2.5rem 3rem;
 }
-
 .quote-text {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.65;
   margin-bottom: 1.5rem;
   color: rgba(255,255,255,0.9);
 }
-
 .quote-author {
   font-size: 0.85rem;
   color: rgba(255,255,255,0.45);
@@ -505,7 +449,6 @@ h1 em {
   position: relative;
   overflow: hidden;
 }
-
 .cta-section::before {
   content: '';
   position: absolute;
@@ -518,7 +461,7 @@ h1 em {
     rgba(13,148,136,0.15) 0%, transparent 65%);
   pointer-events: none;
 }
-
+.cta-section > * { position: relative; }
 .cta-section h2 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 4vw, 3.2rem);
@@ -526,64 +469,29 @@ h1 em {
   line-height: 1.1;
 }
 .cta-section h2 em { font-style: italic; color: var(--gold2); }
-
 .cta-section p {
   color: rgba(255,255,255,0.5);
   margin-bottom: 2.5rem;
   font-size: 1.05rem;
 }
-
-.cta-signup {
-  display: flex;
-  gap: 0.75rem;
-  max-width: 460px;
-  margin: 0 auto 1rem;
-}
-.cta-signup input {
-  flex: 1;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  padding: 0.875rem 1.25rem;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.cta-signup input:focus { border-color: var(--teal); }
-.cta-signup input::placeholder { color: rgba(255,255,255,0.35); }
-.cta-signup button {
-  background: var(--teal);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  padding: 0.875rem 1.5rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s, transform 0.15s;
-}
-.cta-signup button:hover { background: var(--teal2); transform: translateY(-1px); }
-
 .cta-note {
   font-size: 0.8rem;
   color: rgba(255,255,255,0.3);
+  margin-top: 1.5rem;
 }
 
-/* ── Responsive (page-specific; nav + footer in shared.css) ── */
+/* ── Responsive ── */
 @media (max-width: 768px) {
-  .signup-form { flex-direction: column; }
-  .signup-form button { width: 100%; }
+  .hero { padding: 7rem 1.25rem 3rem; min-height: auto; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; text-align: center; }
+  .section { padding: 3.5rem 1.25rem; }
+  .product-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
-  .kpi-row { grid-template-columns: repeat(3, 1fr); }
-  .chart-row { grid-template-columns: 1fr; }
-  .compare-table { font-size: 0.75rem; }
-  .compare-table th, .compare-table td { padding: 0.6rem 0.6rem; }
-  .cta-signup { flex-direction: column; }
-  .cta-signup button { width: 100%; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .quote-block { padding: 1.75rem 1.5rem; }
+  .about { padding: 3rem 1.25rem; }
+  .cta-section { padding: 4rem 1.25rem; }
 }
 </style>
 <script data-goatcounter="https://fourbuckets.goatcounter.com/count"
@@ -595,380 +503,202 @@ h1 em {
 <nav>
   <a href="/" class="logo">Four<span>Buckets</span></a>
   <div class="nav-links" style="display:flex;gap:1.5rem;align-items:center">
-    <a href="/#features">Features</a>
-    <a href="/#compare">vs. Others</a>
+    <a href="#products">Products</a>
     <a href="/tools/">Free Tools</a>
-    <a href="/#waitlist" class="nav-cta">Join Waitlist</a>
+    <a href="https://www.etsy.com/shop/FourBucketsStudio/" class="nav-cta" target="_blank" rel="noopener">Shop on Etsy</a>
   </div>
 </nav>
 
+<main>
+
 <!-- Hero -->
 <section class="hero" id="top">
-  <h1>Your Retirement,<br><em>Fully in Your Hands</em></h1>
+  <span class="hero-badge">Digital downloads · Instant access</span>
+
+  <h1>Spreadsheets That<br><em>Show Their Work</em></h1>
 
   <p class="hero-sub">
-    No black boxes. No advisor upsells. A transparent retirement planner that shows exactly how your money grows, when RMDs kick in, and whether your portfolio will last — down to the year.
+    Carefully built Excel and Google Sheets tools for financial independence, caregiving, and health tracking — where every formula is visible and every assumption is yours to change. Plus free calculators you can use right now.
   </p>
 
-  <form class="signup-form" id="hero-form" onsubmit="handleSignup(event,'hero')">
-    <input type="email" id="hero-email" placeholder="your@email.com" required>
-    <button type="submit">Join the Waitlist</button>
-  </form>
-  <div class="success-msg" id="hero-success">
-    ✓ You're on the list! We'll be in touch with early access details.
+  <div class="hero-actions">
+    <a href="https://www.etsy.com/shop/FourBucketsStudio/" class="btn btn-primary" target="_blank" rel="noopener">Shop on Etsy</a>
+    <a href="#tools" class="btn btn-secondary">Try the free tools</a>
   </div>
-  <p class="form-note">No spam. No credit card. Unsubscribe anytime.</p>
 
-  <div class="social-proof">
-    <p>Built by a software engineer who got tired of retirement tools that hide the math.</p>
+  <p class="hero-note">One-time purchase · No subscriptions · Yours to keep and edit</p>
+</section>
+
+<!-- Products -->
+<section class="section" id="products">
+  <div class="section-label">Digital downloads</div>
+  <h2 class="section-title">The <em>Shop</em></h2>
+  <p class="section-sub">Spreadsheets and printables built the way I'd want to use them: no locked cells hiding the logic, no monthly fee, no account required.</p>
+
+  <div class="product-grid">
+
+    <!-- To go live: replace href with the Etsy listing URL and delete the .product-status span -->
+    <div class="product-card">
+      <div class="product-media">
+        <img src="/img/products/web/fire-roadmap-pro.webp" width="1000" height="1000" loading="lazy"
+             alt="FIRE Roadmap Pro spreadsheet dashboard showing a FIRE number of $1,447,307, a FIRE date of November 2039, and what-if levers.">
+        <span class="product-status">Coming soon</span>
+      </div>
+      <div class="product-body">
+        <h3>FIRE Roadmap Pro</h3>
+        <div class="product-tagline">Multi-Scenario Financial Independence Calculator</div>
+        <p>Work out your FIRE number, your FIRE date, and exactly how much a few small changes move it. Models Lean, Regular, and Fat FIRE side by side, with a Debt Bridge that accounts for loans still running when you stop working.</p>
+        <div class="product-badges">
+          <span>Lean / Regular / Fat FIRE</span>
+          <span>8 interconnected tabs</span>
+          <span>Debt Bridge built in</span>
+          <span>Excel</span>
+        </div>
+        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <img src="/img/products/web/caretrack.webp" width="1000" height="1000" loading="lazy"
+             alt="CareTrack caregiver health dashboard showing blood pressure, glucose, medication adherence, weight, next appointment and refill flags.">
+        <span class="product-status">Coming soon</span>
+      </div>
+      <div class="product-body">
+        <h3>CareTrack</h3>
+        <div class="product-tagline">Caregiver Health Dashboard</div>
+        <p>One dashboard for the person you're caring for: blood pressure and glucose trends, medication adherence, weight change, upcoming appointments, and refill flags that warn you before the pharmacy run becomes urgent.</p>
+        <div class="product-badges">
+          <span>Track up to 4 people</span>
+          <span>Automatic refill alerts</span>
+          <span>Excel + Google Sheets</span>
+        </div>
+        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <img src="/img/products/web/visitready-spreadsheet.webp" width="1000" height="1000" loading="lazy"
+             alt="VisitReady spreadsheet generating a one-page doctor visit report with blood pressure, glucose, weight, medications and questions.">
+        <span class="product-status">Coming soon</span>
+      </div>
+      <div class="product-body">
+        <h3>VisitReady</h3>
+        <div class="product-tagline">Doctor Visit Report Generator</div>
+        <p>Turn months of readings into a single page your doctor can actually scan in the two minutes they have. Pick a 30, 60, 90, or 180-day window and the whole report recalculates — averages, highs and lows, medication changes, and your questions.</p>
+        <div class="product-badges">
+          <span>One-page summary</span>
+          <span>30 / 60 / 90 / 180-day window</span>
+          <span>Excel + Google Sheets</span>
+        </div>
+        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <img src="/img/products/web/visitready-printable.webp" width="1000" height="1000" loading="lazy"
+             alt="VisitReady printable doctor visit companion, a two-page large-print form with spaces for blood pressure, blood sugar, medications and questions.">
+        <span class="product-status">Coming soon</span>
+      </div>
+      <div class="product-body">
+        <h3>VisitReady Printable</h3>
+        <div class="product-tagline">Doctor Visit Companion</div>
+        <p>The no-spreadsheet version. A two-page, large-print form you fill in by hand and take to the appointment — readings, current medications, how you've been feeling, and the questions you don't want to forget to ask.</p>
+        <div class="product-badges">
+          <span>2-page printable set</span>
+          <span>Large print · senior friendly</span>
+          <span>Letter + A4 included</span>
+          <span>PDF</span>
+        </div>
+        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- App Preview -->
-<section class="preview-section">
-  <span class="preview-label">↓ Live app preview</span>
-
-  <div class="preview-frame">
-    <div class="browser-chrome">
-      <div class="browser-dots">
-        <div class="dot dot-r"></div>
-        <div class="dot dot-y"></div>
-        <div class="dot dot-g"></div>
-      </div>
-      <div class="browser-url">fourbuckets.app / dashboard</div>
-    </div>
-
-    <div class="app-preview">
-      <div class="dash-header">
-        <h3>Four Buckets Retirement Projection Planner</h3>
-        <p>Multi-bucket retirement analysis with RMD tracking · Period: 03/2025</p>
-      </div>
-
-      <!-- KPI Cards -->
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <div class="kpi-label">Total Today</div>
-          <div class="kpi-value">$847,320</div>
-          <div class="kpi-sub">all accounts</div>
-        </div>
-        <div class="kpi-card gold">
-          <div class="kpi-label">At Retirement (65)</div>
-          <div class="kpi-value">$2.14M</div>
-          <div class="kpi-sub">17 yrs @ 7.0%</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">SS Monthly Benefit</div>
-          <div class="kpi-value">$2,847</div>
-          <div class="kpi-sub">claiming at 67</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Portfolio Lasts Until</div>
-          <div class="kpi-value" style="color:#22c55e">Age 90+</div>
-          <div class="kpi-sub">spending $6,000/mo</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Monte Carlo Success</div>
-          <div class="kpi-value" style="color:#22c55e">84.3%</div>
-          <div class="kpi-sub">of 1,000 simulations</div>
-        </div>
-        <div class="kpi-card gold">
-          <div class="kpi-label">Mortgage Payoff</div>
-          <div class="kpi-value">Age 61.4</div>
-          <div class="kpi-sub">before retirement ✓</div>
-        </div>
-      </div>
-
-      <!-- Charts row -->
-      <div class="chart-row">
-        <div class="chart-box">
-          <div class="chart-title">Portfolio Balance Over Retirement</div>
-          <svg class="chart-svg" viewBox="0 0 400 90" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="portGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#0d9488" stop-opacity="0.4"/>
-                <stop offset="100%" stop-color="#0d9488" stop-opacity="0.02"/>
-              </linearGradient>
-            </defs>
-            <path d="M0,80 C20,70 40,50 60,35 C80,20 100,15 120,18 C140,21 160,28 180,32 C200,36 220,38 240,42 C260,46 280,55 300,62 C320,69 340,74 360,78 C380,82 400,85 400,85 L400,90 L0,90 Z"
-              fill="url(#portGrad)" stroke="none"/>
-            <path d="M0,80 C20,70 40,50 60,35 C80,20 100,15 120,18 C140,21 160,28 180,32 C200,36 220,38 240,42 C260,46 280,55 300,62 C320,69 340,74 360,78 C380,82 400,85 400,85"
-              fill="none" stroke="#0d9488" stroke-width="2"/>
-            <!-- RMD start line -->
-            <line x1="200" y1="0" x2="200" y2="90" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
-            <text x="203" y="10" font-size="5" fill="#8b5cf6" font-family="DM Sans">RMDs start (73)</text>
-            <!-- SS start line -->
-            <line x1="130" y1="0" x2="130" y2="90" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
-            <text x="133" y="10" font-size="5" fill="#f59e0b" font-family="DM Sans">SS starts (67)</text>
-          </svg>
-        </div>
-
-        <div class="chart-box">
-          <div class="chart-title">Monthly Income Sources</div>
-          <svg class="chart-svg" viewBox="0 0 220 90" preserveAspectRatio="none">
-            <!-- Bars: SS (gold) + RMD (purple) + Portfolio (teal) stacked -->
-            <!-- Age 65 -->
-            <rect x="8"  y="60" width="14" height="25" fill="#f59e0b" opacity="0.9"/>
-            <rect x="8"  y="40" width="14" height="20" fill="#0d9488" opacity="0.9"/>
-            <!-- Age 68 -->
-            <rect x="28" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
-            <rect x="28" y="37" width="14" height="15" fill="#0d9488" opacity="0.9"/>
-            <!-- Age 73 — RMD kicks in -->
-            <rect x="48" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
-            <rect x="48" y="38" width="14" height="14" fill="#8b5cf6" opacity="0.9"/>
-            <rect x="48" y="28" width="14" height="10" fill="#0d9488" opacity="0.9"/>
-            <!-- Age 78 -->
-            <rect x="68" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
-            <rect x="68" y="34" width="14" height="18" fill="#8b5cf6" opacity="0.9"/>
-            <rect x="68" y="27" width="14" height="7" fill="#0d9488" opacity="0.9"/>
-            <!-- Age 83 — RMD > goal -->
-            <rect x="88" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
-            <rect x="88" y="25" width="14" height="27" fill="#8b5cf6" opacity="0.9"/>
-            <rect x="88" y="18" width="14" height="7" fill="#ef4444" opacity="0.9"/>
-            <!-- Age 88 -->
-            <rect x="108" y="52" width="14" height="33" fill="#f59e0b" opacity="0.9"/>
-            <rect x="108" y="20" width="14" height="32" fill="#8b5cf6" opacity="0.9"/>
-            <rect x="108" y="10" width="14" height="10" fill="#ef4444" opacity="0.9"/>
-            <!-- Spending goal line -->
-            <line x1="0" y1="27" x2="220" y2="27" stroke="#0f1f3d" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
-            <text x="130" y="25" font-size="5" fill="#64748b" font-family="DM Sans">Goal: $6,000/mo</text>
-            <!-- Legend -->
-            <rect x="0" y="78" width="7" height="5" fill="#f59e0b" rx="1"/>
-            <text x="9" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">Social Security</text>
-            <rect x="60" y="78" width="7" height="5" fill="#8b5cf6" rx="1"/>
-            <text x="69" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">RMD</text>
-            <rect x="100" y="78" width="7" height="5" fill="#0d9488" rx="1"/>
-            <text x="109" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">Portfolio</text>
-            <rect x="145" y="78" width="7" height="5" fill="#ef4444" rx="1"/>
-            <text x="154" y="83" font-size="4.5" fill="#64748b" font-family="DM Sans">RMD Excess</text>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Bottom row hint -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem">
-        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
-          📊 Monte Carlo Distribution (1,000 runs)
-        </div>
-        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
-          🏛️ SS Claiming Age Comparison
-        </div>
-        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.5rem;font-size:0.55rem;color:rgba(255,255,255,0.4)">
-          📈 Growth Projection to Age 105 + RMD Schedule
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Features -->
-<section class="features" id="features">
-  <div class="section-label">What makes it different</div>
-  <h2 class="section-title">Built for people who want to <em>understand</em> their retirement</h2>
-  <p class="section-sub">Most tools tell you a number. Four Buckets shows you the math behind it — and lets you change every assumption.</p>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Four-Bucket Tracking</h3>
-      <p>Tax-Deferred, Tax-Free (Roth), Taxable, and HSA — tracked separately because they grow, get taxed, and get withdrawn differently. Your net worth is not just one number.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📋</div>
-      <h3>Real RMD Calculations</h3>
-      <p>Required Minimum Distributions calculated year by year from the IRS Uniform Lifetime Table — including the SECURE 2.0 change to age 75 for those born 1960+. No estimating.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎲</div>
-      <h3>Monte Carlo Simulation</h3>
-      <p>1,000 randomized scenarios test your plan against market volatility. See the probability your money lasts, not just the optimistic straight-line forecast.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏛️</div>
-      <h3>Social Security Optimizer</h3>
-      <p>Compare claiming at 62 vs. 67 vs. 70. See the crossover age and lifetime total for each option. The right answer depends on your specific situation.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏠</div>
-      <h3>Mortgage Integration</h3>
-      <p>Your mortgage is part of your retirement plan. Track payoff age, interest cost, and how your payment affects the portfolio draw year by year.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚙️</div>
-      <h3>Every Assumption is Yours</h3>
-      <p>Pre-retirement return, in-retirement return, spending goal, SS claiming age — all configurable. No black-box assumptions you can't see or change.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Spending Phases -->
-<section class="features" id="phases">
+<!-- Spending phases (educational) -->
+<section class="section" id="phases">
   <div class="section-label">How real retirees spend</div>
   <h2 class="section-title">Your spending won't be a <em>flat line</em></h2>
-  <p class="section-sub">Most planners stretch one spending number across 30 years. In reality, retirement moves through three phases — and Four Buckets models each one.</p>
+  <p class="section-sub">Most planning assumes one spending number stretched across 30 years. In reality, retirement moves through three distinct phases — and knowing which one you're in changes the math.</p>
 
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-icon">✈️</div>
       <span class="phase-range">Go-Go · ~62–74</span>
       <h3>Go-Go Years</h3>
-      <p>The active early years: travel, hobbies, helping the kids, the things you retired for. Discretionary spending is at its highest — and your plan should expect it, not pretend you'll live lean from day one.</p>
+      <p>The active early years: travel, hobbies, helping the kids, the things you retired for. Discretionary spending is at its highest — and a realistic plan should expect that, not assume you'll live lean from day one.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon">🌿</div>
       <span class="phase-range">Slow-Go · ~75–84</span>
       <h3>Slow-Go Years</h3>
-      <p>The pace eases. Less long-haul travel, more time close to home. Spending typically settles 20–30% below the Go-Go years — which can meaningfully extend how long your portfolio lasts.</p>
+      <p>The pace eases. Less long-haul travel, more time close to home. Spending typically settles 20–30% below the Go-Go years — which can meaningfully extend how long a portfolio lasts.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon">🏡</div>
       <span class="phase-range">No-Go · 85+</span>
       <h3>No-Go Years</h3>
-      <p>Activity slows further, but healthcare and potential long-term-care costs can rise. Four Buckets lets you taper discretionary spending while flagging a separate medical bump for these years.</p>
+      <p>Activity slows further, but healthcare and potential long-term-care costs can rise. Discretionary spending falls while medical costs climb — two curves moving in opposite directions.</p>
     </div>
   </div>
 
-  <p class="phases-note">Set a <strong>separate annual spending level for each phase</strong> — and watch how the curve, not a single flat number, changes whether your money lasts. Every phase boundary and amount is yours to edit.</p>
+  <p class="phases-note">Treating retirement as <strong>three phases instead of one flat number</strong> usually changes the answer — often for the better, since the expensive years come first and the frugal years last longer than people expect.</p>
 </section>
 
-<!-- Comparison -->
-<section class="compare" id="compare">
-  <div class="section-label">Honest comparison</div>
-  <h2 class="section-title" style="text-align:center">How we compare</h2>
+<!-- Free tools -->
+<section class="section" id="tools">
+  <div class="section-label">Free, no signup</div>
+  <h2 class="section-title">Calculators you can use <em>right now</em></h2>
+  <p class="section-sub">Both run entirely in your browser. Nothing is sent anywhere, no email required.</p>
 
-  <table class="compare-table">
-    <thead>
-      <tr>
-        <th></th>
-        <th class="highlight">Four Buckets</th>
-        <th>Empower</th>
-        <th>Boldin</th>
-        <th>Spreadsheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Four-bucket tracking</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="partial">Partial</span></td>
-        <td><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-      </tr>
-      <tr>
-        <td>RMDs calculated from IRS table</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-        <td><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-      </tr>
-      <tr>
-        <td>SECURE 2.0 (age 75 for 1960+)</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-        <td><span class="partial">Partial</span></td>
-        <td><span class="cross">—</span></td>
-      </tr>
-      <tr>
-        <td>Go-Go / Slow-Go / No-Go spending phases</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-        <td><span class="partial">Partial</span></td>
-        <td><span class="cross">—</span></td>
-      </tr>
-      <tr>
-        <td>Monte Carlo simulation</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="check">✓</span></td>
-        <td><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-      </tr>
-      <tr>
-        <td>All assumptions visible & editable</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-        <td><span class="partial">Partial</span></td>
-        <td><span class="check">✓</span></td>
-      </tr>
-      <tr>
-        <td>No data selling / advisor upsells</td>
-        <td class="highlight"><span class="check">✓</span></td>
-        <td><span class="cross">—</span></td>
-        <td><span class="check">✓</span></td>
-        <td><span class="check">✓</span></td>
-      </tr>
-      <tr>
-        <td>Monthly cost</td>
-        <td class="highlight" style="color:var(--gold2)">~$7</td>
-        <td>Free*</td>
-        <td>$10–17</td>
-        <td>Free</td>
-      </tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.72rem;color:rgba(255,255,255,0.25);margin-top:0.75rem;text-align:center">*Empower is free but monetizes your data and pushes advisor relationships.</p>
+  <div class="tools-grid">
+    <a class="tool-card" href="/rmd-calculator/">
+      <div class="feature-icon">📋</div>
+      <h3>RMD Calculator</h3>
+      <div class="tagline">SECURE 2.0 compliant · Updated for 2026</div>
+      <p>Calculate your Required Minimum Distributions year by year from the official IRS Uniform Lifetime Table. Applies the correct SECURE 2.0 start age automatically and switches to the Joint Life Table when your spouse is more than 10 years younger.</p>
+      <span class="cta">Open the calculator</span>
+    </a>
+
+    <a class="tool-card" href="/mortgage-payoff-calculator/">
+      <div class="feature-icon">🏠</div>
+      <h3>Mortgage Payoff Calculator</h3>
+      <div class="tagline">Extra-principal savings · Month-by-month</div>
+      <p>See exactly when your mortgage will be paid off from your current balance and the principal/interest split on your statement. Add extra principal to see how much time and total interest you'd save.</p>
+      <span class="cta">Open the calculator</span>
+    </a>
+  </div>
 </section>
 
-<!-- Founder note -->
-<section class="testimonial">
+<!-- About -->
+<section class="about">
   <div class="quote-block">
-    <p class="quote-text">"I built Four Buckets because every retirement tool I tried either hid its math, sold my data, or pushed me toward an advisor. I wanted to see exactly how RMDs, Social Security timing, and bucket sequencing actually played out — year by year, with every assumption editable. So I built it for myself first. The waitlist is open if you want it too."</p>
-    <p class="quote-author"><strong>The founder</strong> · Why I'm building this</p>
+    <p class="quote-text">"I build these because every tool I tried either hid its math, locked it behind a subscription, or pushed me toward an advisor. I wanted spreadsheets where every formula is visible and every assumption is mine to change — so I built them for myself first, then cleaned them up so other people could use them too."</p>
+    <p class="quote-author"><strong>Four Buckets Studio</strong> · Why I make these</p>
   </div>
 </section>
 
 <!-- Final CTA -->
-<section class="cta-section" id="waitlist">
-  <h2>Be First in Line.<br><em>Retire on Your Terms.</em></h2>
-  <p>Early access members get 1 month free and influence the roadmap.</p>
-
-  <form class="cta-signup" id="cta-form" onsubmit="handleSignup(event,'cta')">
-    <input type="email" id="cta-email" placeholder="your@email.com" required>
-    <button type="submit">Claim My Spot</button>
-  </form>
-  <div class="success-msg" id="cta-success" style="max-width:460px;margin:0 auto">
-    ✓ You're in! Check your inbox for confirmation.
-  </div>
-  <p class="cta-note">No credit card required · Unsubscribe anytime · We respect your privacy</p>
+<section class="cta-section">
+  <h2>Built to Be Read,<br><em>Not Just Run.</em></h2>
+  <p>Every tool in the shop is a one-time purchase you own outright.</p>
+  <a href="https://www.etsy.com/shop/FourBucketsStudio/" class="btn btn-primary" target="_blank" rel="noopener">Shop on Etsy</a>
+  <p class="cta-note">Instant download · No account required · No subscriptions</p>
 </section>
 
+</main>
+
 <footer>
-  <div class="logo" style="font-size:1.1rem">Four<span style="color:var(--gold)">Buckets</span></div>
-  <div>© 2026 Four Buckets · <a href="mailto:hello@fourbuckets.app" style="color:rgba(255,255,255,0.3);text-decoration:none">hello@fourbuckets.app</a></div>
+  <a href="/" class="logo" style="font-size:1.1rem">Four<span>Buckets</span></a>
+  <div>© 2026 Four Buckets · <a href="mailto:hello@fourbuckets.app">hello@fourbuckets.app</a></div>
 </footer>
 
 <script>
-// Simple waitlist handler — replace the fetch URL with your actual form endpoint
-// (e.g. a Formspree URL, MailerLite form action, or your own API)
-function handleSignup(e, source) {
-  e.preventDefault();
-  const emailInput = document.getElementById(source === 'hero' ? 'hero-email' : 'cta-email');
-  const successMsg = document.getElementById(source === 'hero' ? 'hero-success' : 'cta-success');
-  const form = e.target;
-  const email = emailInput.value;
-
-  // ─── REPLACE THIS URL with your Formspree / MailerLite / own endpoint ───
-  const ENDPOINT = 'https://formspree.io/f/mzdkypee';
-
-  // Disable form during submission
-  form.querySelectorAll('input,button').forEach(el => el.disabled = true);
-  const btn = form.querySelector('button');
-  btn.textContent = 'Joining…';
-
-  fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ email, source })
-  })
-  .then(r => r.ok ? showSuccess() : fallbackSuccess())
-  .catch(() => fallbackSuccess());   // show success even if fetch fails (demo mode)
-
-  function showSuccess() {
-    form.style.display = 'none';
-    successMsg.style.display = 'block';
-  }
-  function fallbackSuccess() { showSuccess(); }
-}
-
-// Smooth intersection observer for subtle reveal
+// Subtle reveal on scroll
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -978,7 +708,7 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.feature-card, .quote-block, .compare-table').forEach(el => {
+document.querySelectorAll('.product-card, .feature-card, .tool-card, .quote-block').forEach(el => {
   el.style.opacity = '0';
   el.style.transform = 'translateY(24px)';
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
