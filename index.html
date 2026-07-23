@@ -295,6 +295,29 @@ h1 em { font-style: italic; color: var(--teal2); }
 }
 .product-card:hover .product-cta::after { transform: translateX(3px); }
 
+/* Featured card — spans the grid, image beside the copy */
+.product-card.featured {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  border-color: rgba(212,168,50,0.3);
+}
+.product-card.featured:hover { border-color: rgba(212,168,50,0.5); }
+.product-card.featured .product-media {
+  flex: 0 0 40%;
+  aspect-ratio: 1 / 1;
+}
+.product-card.featured .product-body {
+  justify-content: center;
+  padding: 2.5rem 2.75rem;
+}
+.product-card.featured h3 { font-size: 1.6rem; }
+.product-card.featured .product-tagline { font-size: 0.92rem; }
+.product-card.featured p { font-size: 0.95rem; max-width: 52ch; }
+.product-status.new {
+  border-color: rgba(20,184,166,0.5);
+  color: var(--teal2);
+}
+
 /* ── Spending phases ── */
 .features-grid {
   display: grid;
@@ -360,6 +383,13 @@ h1 em { font-style: italic; color: var(--teal2); }
   margin: 2.5rem auto 0;
 }
 .phases-note strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+.phases-note a {
+  color: var(--gold2);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(240,192,64,0.35);
+  transition: border-color 0.15s;
+}
+.phases-note a:hover { border-bottom-color: var(--gold2); }
 
 /* ── Free tools ── */
 .tools-grid {
@@ -487,6 +517,10 @@ h1 em { font-style: italic; color: var(--teal2); }
   .btn { width: 100%; text-align: center; }
   .section { padding: 3.5rem 1.25rem; }
   .product-grid { grid-template-columns: 1fr; }
+  .product-card.featured { flex-direction: column; }
+  .product-card.featured .product-media { flex: none; }
+  .product-card.featured .product-body { padding: 1.6rem 1.75rem 1.75rem; }
+  .product-card.featured h3 { font-size: 1.35rem; }
   .features-grid { grid-template-columns: 1fr; }
   .tools-grid { grid-template-columns: 1fr; }
   .quote-block { padding: 1.75rem 1.5rem; }
@@ -537,12 +571,30 @@ h1 em { font-style: italic; color: var(--teal2); }
 
   <div class="product-grid">
 
-    <!-- To go live: replace href with the Etsy listing URL and delete the .product-status span -->
+    <div class="product-card featured">
+      <div class="product-media">
+        <img src="/img/products/web/spending-phases-planner.webp" width="1000" height="1000"
+             alt="Spending Phases Planner chart titled Your Portfolio Journey Through the Phases, with portfolio balance bars colour-coded by Saving, Go-Go, Slow-Go and No-Go phases from age 45 to 95.">
+        <span class="product-status new">New</span>
+      </div>
+      <div class="product-body">
+        <h3>Spending Phases Planner</h3>
+        <div class="product-tagline">Retirement Spending &amp; Portfolio Planner — Go-Go · Slow-Go · No-Go</div>
+        <p>Model retirement the way it actually unfolds. Set a separate spending level for your Go-Go, Slow-Go, and No-Go years and watch the portfolio curve respond — including a shortfall warning if the money runs out before you do. The planner behind the three phases described below.</p>
+        <div class="product-badges">
+          <span>Three spending phases</span>
+          <span>Shortfall detection</span>
+          <span>Portfolio projection to 95</span>
+          <span>Excel + Google Sheets</span>
+        </div>
+        <a class="product-cta" href="https://www.etsy.com/listing/4542950125/retirement-spending-phases-planner-go-go" target="_blank" rel="noopener">View on Etsy</a>
+      </div>
+    </div>
+
     <div class="product-card">
       <div class="product-media">
         <img src="/img/products/web/fire-roadmap-pro.webp" width="1000" height="1000" loading="lazy"
              alt="FIRE Roadmap Pro spreadsheet dashboard showing a FIRE number of $1,447,307, a FIRE date of November 2039, and what-if levers.">
-        <span class="product-status">Coming soon</span>
       </div>
       <div class="product-body">
         <h3>FIRE Roadmap Pro</h3>
@@ -554,7 +606,7 @@ h1 em { font-style: italic; color: var(--teal2); }
           <span>Debt Bridge built in</span>
           <span>Excel</span>
         </div>
-        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+        <a class="product-cta" href="https://www.etsy.com/listing/4542957008/fire-roadmap-pro-financial-independence" target="_blank" rel="noopener">View on Etsy</a>
       </div>
     </div>
 
@@ -562,7 +614,6 @@ h1 em { font-style: italic; color: var(--teal2); }
       <div class="product-media">
         <img src="/img/products/web/caretrack.webp" width="1000" height="1000" loading="lazy"
              alt="CareTrack caregiver health dashboard showing blood pressure, glucose, medication adherence, weight, next appointment and refill flags.">
-        <span class="product-status">Coming soon</span>
       </div>
       <div class="product-body">
         <h3>CareTrack</h3>
@@ -573,7 +624,7 @@ h1 em { font-style: italic; color: var(--teal2); }
           <span>Automatic refill alerts</span>
           <span>Excel + Google Sheets</span>
         </div>
-        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+        <a class="product-cta" href="https://www.etsy.com/listing/4542955564/caregiver-health-dashboard-track-up-to-4" target="_blank" rel="noopener">View on Etsy</a>
       </div>
     </div>
 
@@ -581,7 +632,6 @@ h1 em { font-style: italic; color: var(--teal2); }
       <div class="product-media">
         <img src="/img/products/web/visitready-spreadsheet.webp" width="1000" height="1000" loading="lazy"
              alt="VisitReady spreadsheet generating a one-page doctor visit report with blood pressure, glucose, weight, medications and questions.">
-        <span class="product-status">Coming soon</span>
       </div>
       <div class="product-body">
         <h3>VisitReady</h3>
@@ -592,7 +642,7 @@ h1 em { font-style: italic; color: var(--teal2); }
           <span>30 / 60 / 90 / 180-day window</span>
           <span>Excel + Google Sheets</span>
         </div>
-        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+        <a class="product-cta" href="https://www.etsy.com/listing/4542958520/visitready-doctor-visit-report-generator" target="_blank" rel="noopener">View on Etsy</a>
       </div>
     </div>
 
@@ -600,7 +650,6 @@ h1 em { font-style: italic; color: var(--teal2); }
       <div class="product-media">
         <img src="/img/products/web/visitready-printable.webp" width="1000" height="1000" loading="lazy"
              alt="VisitReady printable doctor visit companion, a two-page large-print form with spaces for blood pressure, blood sugar, medications and questions.">
-        <span class="product-status">Coming soon</span>
       </div>
       <div class="product-body">
         <h3>VisitReady Printable</h3>
@@ -612,7 +661,7 @@ h1 em { font-style: italic; color: var(--teal2); }
           <span>Letter + A4 included</span>
           <span>PDF</span>
         </div>
-        <a class="product-cta" href="https://www.etsy.com/shop/FourBucketsStudio/" target="_blank" rel="noopener">Visit the shop</a>
+        <a class="product-cta" href="https://www.etsy.com/listing/4542886896/doctor-visit-companion-large-print" target="_blank" rel="noopener">View on Etsy</a>
       </div>
     </div>
 
@@ -646,7 +695,7 @@ h1 em { font-style: italic; color: var(--teal2); }
     </div>
   </div>
 
-  <p class="phases-note">Treating retirement as <strong>three phases instead of one flat number</strong> usually changes the answer — often for the better, since the expensive years come first and the frugal years last longer than people expect.</p>
+  <p class="phases-note">Treating retirement as <strong>three phases instead of one flat number</strong> usually changes the answer — often for the better, since the expensive years come first and the frugal years last longer than people expect. The <a href="#products">Spending Phases Planner</a> lets you put your own numbers against each phase.</p>
 </section>
 
 <!-- Free tools -->
